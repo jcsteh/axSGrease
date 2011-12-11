@@ -1,8 +1,10 @@
 // ==UserScript==
-// @name           TwitterAccessibilityFixes
-// @namespace      http://www.jantrid.net/gmScripts/
+// @name           Twitter Accessibility Fixes
+// @namespace      http://www.jantrid.net/axSGrease/
 // @description    Improves the accessibility of Twitter.
 // @author James Teh <jamie@jantrid.net>
+// @copyright 2011 James Teh
+// @license GNU General Public License version 2.0
 // @version 0.20111210.03
 // @include        https://twitter.com/*
 // @include        http://twitter.com/*

@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name Google Docs Accessibility Fixes
-// @namespace http://www.jantrid.net/gmScripts/
+// @namespace http://www.jantrid.net/axSGrease/
 // @description Improves the accessibility of Google Docs.
 // @author James Teh <jamie@jantrid.net>
+// @copyright 2011 James Teh
+// @license GNU General Public License version 2.0
 // @version 0.20111110.03
 // @include https://docs.google.com/*
 // ==/UserScript==

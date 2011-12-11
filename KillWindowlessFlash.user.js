@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name           Kill Windowless Flash
-// @namespace      http://www.jantrid.net/gmScripts/
+// @namespace      http://www.jantrid.net/axSGrease/
 // @description    Makes windowless (transparent or opaque) Adobe Flash objects windowed so they have a chance of being accessible.
 // @author James Teh <jamie@jantrid.net>
+// @copyright 2011 James Teh
+// @license GNU General Public License version 2.0
 // @version 0.20111126.02
 // ==/UserScript==
 
