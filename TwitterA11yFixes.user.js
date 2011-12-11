@@ -5,7 +5,7 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2011 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20111210.03
+// @version 0.20111212.01
 // @include        https://twitter.com/*
 // @include        http://twitter.com/*
 // ==/UserScript==
@@ -26,11 +26,10 @@ function onAttrModified(evt) {
 			// Twitter doesn't use real focus for this, so screen readers don't know which tweet has focus.
 			// Force real focus.
 			lastFocusedTweet = target;
-			if (!target.getAttribute("role")) {
+			if (!target.getAttribute("tabindex")) {
 				// Make the node focusable and accessible.
 				target.setAttribute("tabindex", "-1");
-				target.setAttribute("role", "listitem");
-				target.setAttribute("aria-selected", "true");
+				// Unfortunately, changing the role causes Gecko to lag.
 			}
 			var orig = target.getElementsByClassName("original-tweet")[0];
 			target.setAttribute("aria-label", (
