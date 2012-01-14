@@ -3,9 +3,9 @@
 // @namespace      http://www.jantrid.net/axSGrease/
 // @description    Improves the accessibility of Twitter.
 // @author James Teh <jamie@jantrid.net>
-// @copyright 2011 James Teh
+// @copyright 2011-2012 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20111212.01
+// @version 0.20120115.01
 // @include        https://twitter.com/*
 // @include        http://twitter.com/*
 // ==/UserScript==
@@ -36,8 +36,7 @@ function onAttrModified(evt) {
 				orig.getElementsByClassName("account-group")[0].textContent
 				+ orig.getElementsByClassName("js-tweet-text")[0].textContent
 				+ orig.getElementsByClassName("context")[0].textContent
-				+ orig.getElementsByClassName("tweet-stats-container")[0].textContent
-				+ orig.getElementsByClassName("metadata")[0].textContent
+				+ orig.getElementsByClassName("time")[0].textContent
 			));
 			target.setAttribute("aria-expanded",
 				(classes.indexOf(" open ") == -1) ? "false" : "true");
