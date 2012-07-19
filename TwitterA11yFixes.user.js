@@ -81,12 +81,12 @@ function onFocus(evt) {
 		elm.setAttribute("role", "button");
 		target.setAttribute("aria-activedescendant", id);
 
-	} else if (tag == "TEXTAREA" && classes == "twitter-anywhere-tweet-box-editor") {
+	} else if (tag == "TEXTAREA" && classes == "tweet-box") {
 		// This is a tweet box.
 		if (target.getAttribute("aria-describedby"))
 			return;
 		// Make the tweet counter the description of the tweet box for easy access.
-		var elm = target.parentNode.parentNode.parentNode.getElementsByClassName("tweet-counter")[0];
+		var elm = target.parentNode.parentNode.getElementsByClassName("tweet-counter")[0];
 		var id = "counter" + ++idCounter;
 		elm.setAttribute("id", id);
 		target.setAttribute("aria-describedby", id);
