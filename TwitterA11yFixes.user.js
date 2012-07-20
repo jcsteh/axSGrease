@@ -17,11 +17,11 @@ function onAttrModified(evt) {
 	if (attrName != "class")
 		return;
 	var target = evt.target;
-	var classes = target.getAttribute("class");
+	var classes = target.classList;
 	if (!classes)
 		return;
-	if (classes.indexOf(" stream-item") != -1) {
-		if (classes.indexOf("hovered-stream-item") != -1) {
+	if (classes.contains("stream-item")) {
+		if (classes.contains("hovered-stream-item")) {
 			// This tweet just got focus.
 			// Twitter doesn't use real focus for this, so screen readers don't know which tweet has focus.
 			// Force real focus.
@@ -39,7 +39,7 @@ function onAttrModified(evt) {
 				+ orig.getElementsByClassName("time")[0].textContent
 			));
 			target.setAttribute("aria-expanded",
-				(classes.indexOf(" open ") == -1) ? "false" : "true");
+				(classes.contains("open")) ? "true" : "false");
 			target.focus();
 		} else
 			lastFocusedTweet = null;
@@ -65,6 +65,8 @@ function onNodeRemoved(evt) {
 var idCounter = 0;
 function onFocus(evt) {
 	var target = evt.target;
+	if (target == document)
+		return;
 	var tag = target.tagName;
 	var classes = target.getAttribute("class");
 
