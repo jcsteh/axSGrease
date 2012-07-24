@@ -5,7 +5,7 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2011-2012 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20120709.01
+// @version 0.20120724.01
 // @include *
 // ==/UserScript==
 
@@ -17,9 +17,9 @@ function reloadFlash(elm) {
 	elm.parentNode.replaceChild(elm.cloneNode(), elm);
 }
 
-function killWindowlessFlash() {
+function killWindowlessFlash(target) {
 	// First, deal with embed elements.
-	var elms = document.getElementsByTagName("embed");
+	var elms = target.getElementsByTagName("embed");
 	for (var i = 0; i < elms.length; ++i) {
 		var elm = elms[i];
 		if (elm.getAttribute("type") != "application/x-shockwave-flash")
@@ -32,7 +32,7 @@ function killWindowlessFlash() {
 	}
 
 	// Now, deal with object elements.
-	var elms = document.getElementsByTagName("object");
+	var elms = target.getElementsByTagName("object");
 	for (var i = 0; i < elms.length; ++i) {
 		var elm = elms[i];
 		if (elm.getAttribute("type") != "application/x-shockwave-flash")
@@ -53,7 +53,13 @@ function killWindowlessFlash() {
 }
 
 function onLoad(evt) {
-	killWindowlessFlash();
+	killWindowlessFlash(document);
 }
 
 window.addEventListener("load", onLoad);
+var observer = new MutationObserver(function(mutations) {
+	mutations.forEach(function(mutation) {
+		killWindowlessFlash(mutation.target);
+	});
+});
+observer.observe(document, {childList: true, subtree: true});
