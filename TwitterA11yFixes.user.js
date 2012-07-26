@@ -12,11 +12,7 @@
 
 var lastFocusedTweet = null;
 
-function onAttrModified(evt) {
-	var attrName = evt.attrName;
-	if (attrName != "class")
-		return;
-	var target = evt.target;
+function onClassModified(target) {
 	var classes = target.classList;
 	if (!classes)
 		return;
@@ -46,10 +42,9 @@ function onAttrModified(evt) {
 	}
 }
 
-function onNodeRemoved(evt) {
+function onNodeRemoved(target) {
 	if (!lastFocusedTweet)
 		return;
-	var target = evt.target;
 	if (target.nodeType != Node.ELEMENT_NODE)
 		return;
 	var classes = target.getAttribute("class");
@@ -95,6 +90,17 @@ function onFocus(evt) {
 	}
 }
 
-document.addEventListener("DOMAttrModified", onAttrModified, false);
-document.addEventListener("DOMNodeRemoved", onNodeRemoved, false);
+var observer = new MutationObserver(function(mutations) {
+	mutations.forEach(function(mutation) {
+		if (mutation.type === "childList") {
+			for (var i = 0; i < mutation.removedNodes.length; ++i)
+				onNodeRemoved(mutation.removedNodes[i]);
+		} else if (mutation.type === "attributes") {
+			// This observer only watches the class attribute.
+			onClassModified(mutation.target);
+		}
+	});
+});
+observer.observe(document, {childList: true, attributes: true,
+	subtree: true, attributeFilter: ["class"]});
 document.addEventListener("focus", onFocus, true);
