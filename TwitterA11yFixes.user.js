@@ -47,10 +47,10 @@ function onNodeRemoved(target) {
 		return;
 	if (target.nodeType != Node.ELEMENT_NODE)
 		return;
-	var classes = target.getAttribute("class");
+	var classes = target.classList;
 	if (!classes)
 		return;
-	if (classes == "twttr-dialog-container") {
+	if (classes .contains("twttr-dialog-container")) {
 		// A dialog was just dismissed.
 		// Focus the last focused tweet.
 		lastFocusedTweet.focus();
@@ -63,9 +63,9 @@ function onFocus(evt) {
 	if (target == document)
 		return;
 	var tag = target.tagName;
-	var classes = target.getAttribute("class");
+	var classes = target.classList;
 
-	if (tag == "INPUT" && classes == "twttr-hidden-input") {
+	if (tag == "INPUT" && classes.contains("twttr-hidden-input")) {
 		// This is an input field for a confirmation prompt.
 		// Pressing enter here will activate the OK button.
 		if (target.getAttribute("aria-activedescendant"))
@@ -78,7 +78,7 @@ function onFocus(evt) {
 		elm.setAttribute("role", "button");
 		target.setAttribute("aria-activedescendant", id);
 
-	} else if (tag == "TEXTAREA" && classes == "tweet-box") {
+	} else if (tag == "TEXTAREA" && classes.contains("tweet-box")) {
 		// This is a tweet box.
 		if (target.getAttribute("aria-describedby"))
 			return;
