@@ -5,9 +5,11 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2011-2012 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20120115.01
+// @version 0.20120727.01
 // @include        https://twitter.com/*
 // @include        http://twitter.com/*
+// @homepageURL http://userscripts.org/scripts/show/120210
+// @updateURL https://userscripts.org/scripts/source/120210.user.js
 // ==/UserScript==
 
 var lastFocusedTweet = null;
