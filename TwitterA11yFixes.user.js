@@ -5,7 +5,7 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2011-2012 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20120727.01
+// @version 0.20120814.01
 // @include        https://twitter.com/*
 // @include        http://twitter.com/*
 // @homepageURL http://userscripts.org/scripts/show/120210
@@ -19,7 +19,7 @@ function onClassModified(target) {
 	if (!classes)
 		return;
 	if (classes.contains("stream-item")) {
-		if (classes.contains("hovered-stream-item")) {
+		if (classes.contains("hovered-stream-item") || classes.contains("js-had-hovered-stream-item")) {
 			// This tweet just got focus.
 			// Twitter doesn't use real focus for this, so screen readers don't know which tweet has focus.
 			// Force real focus.
