@@ -5,8 +5,8 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2013 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20130110.01
-// @include        http://www.pandora.com/*
+// @version 0.20130111.01
+// @include http://www.pandora.com/*
 // @homepageURL http://userscripts.org/scripts/show/156173
 // @updateURL https://userscripts.org/scripts/source/156173.user.js
 // ==/UserScript==
@@ -35,6 +35,19 @@ function fixButton(target) {
 	}
 }
 
+function fixStationDetails(target) {
+	document.getElementById("addArtistSeed").setAttribute("aria-label", "Add artist");
+	var nodes = target.getElementsByClassName("deletable");
+	for (var i = 0; i < nodes.length; ++i) {
+		var node = nodes[i];
+		node.setAttribute("role", "button");
+		node.setAttribute("aria-label", "Delete");
+	}
+	var nodes = target.getElementsByClassName("sample");
+	for (var i = 0; i < nodes.length; ++i)
+		nodes[i].firstChild.setAttribute("aria-label", "Sample");
+}
+
 function onClassModified(target) {
 	var classes = target.classList;
 	if (!classes)
@@ -46,6 +59,12 @@ function onClassModified(target) {
 }
 
 function onNodeAdded(target) {
+	if (target.nodeType != Node.ELEMENT_NODE)
+		return;
+	if (target.classList.contains("backstage")) {
+		fixStationDetails(target);
+		return;
+	}
 	var node;
 	if (node = document.getElementById("stationList"))
 		node.setAttribute("role", "radiogroup");
@@ -67,8 +86,16 @@ function onNodeAdded(target) {
 
 function onStyleModified(target) {
 	var style = target.style;
-	if (target.id == "station_menu_dd" && style.visibility == "visible")
-		target.getElementsByTagName("a")[0].focus();
+	if (target.id == "station_menu_dd" && style.visibility == "visible") {
+		var nodes = target.getElementsByTagName("a");
+		for (var i = 0; i < nodes.length; ++i) {
+			var node = nodes[i];
+			if (node.style.display == "none")
+				continue;
+			node.focus();
+			break;
+		}
+	}
 }
 
 function init() {
@@ -81,32 +108,23 @@ function init() {
 		node.setAttribute("role", "button");
 		node.setAttribute("aria-label", "Buy");
 	}
-	// Something causes these nodes to remove ARIA attributes if we set them here,
-	// so delay this.
-	setTimeout(function() {
-		document.getElementById("addArtistSeed").setAttribute("aria-label", "Add artist");
-		var nodes = document.getElementsByClassName("deletable");
-		for (var i = 0; i < nodes.length; ++i) {
-			var node = nodes[i];
-			node.setAttribute("role", "button");
-			node.setAttribute("aria-label", "Delete");
-		}
-		var nodes = document.getElementsByClassName("sample");
-		for (var i = 0; i < nodes.length; ++i)
-			nodes[i].firstChild.setAttribute("aria-label", "Sample");
-	}, 7000);
 }
 
 var observer = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
-		if (mutation.type === "childList") {
-			for (var i = 0; i < mutation.addedNodes.length; ++i)
-				onNodeAdded(mutation.addedNodes[i]);
-		} else if (mutation.type === "attributes") {
-			if (mutation.attributeName == "class")
-				onClassModified(mutation.target);
-			else if (mutation.attributeName == "style")
-				onStyleModified(mutation.target);
+		try {
+			if (mutation.type === "childList") {
+				for (var i = 0; i < mutation.addedNodes.length; ++i)
+					onNodeAdded(mutation.addedNodes[i]);
+			} else if (mutation.type === "attributes") {
+				if (mutation.attributeName == "class")
+					onClassModified(mutation.target);
+				else if (mutation.attributeName == "style")
+					onStyleModified(mutation.target);
+			}
+		} catch (e) {
+			// Catch exceptions for individual mutations so other mutations are still handled.
+			GM_log("Exception while handling mutation: " + e);
 		}
 	});
 });
