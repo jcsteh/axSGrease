@@ -35,17 +35,14 @@ function fixButton(target) {
 	}
 }
 
-function fixStationDetails(target) {
-	document.getElementById("addArtistSeed").setAttribute("aria-label", "Add artist");
-	var nodes = target.getElementsByClassName("deletable");
-	for (var i = 0; i < nodes.length; ++i) {
-		var node = nodes[i];
+function fixStationDetailsItem(target) {
+	var node;
+	if (node = target.querySelector(".deletable")) {
 		node.setAttribute("role", "button");
 		node.setAttribute("aria-label", "Delete");
 	}
-	var nodes = target.getElementsByClassName("sample");
-	for (var i = 0; i < nodes.length; ++i)
-		nodes[i].firstChild.setAttribute("aria-label", "Sample");
+	if (node = target.querySelector(".sample"))
+		node.firstChild.setAttribute("aria-label", "Sample");
 }
 
 function onClassModified(target) {
@@ -61,14 +58,21 @@ function onClassModified(target) {
 function onNodeAdded(target) {
 	if (target.nodeType != Node.ELEMENT_NODE)
 		return;
+	var nodes;
+	var node;
 	if (target.classList.contains("backstage")) {
-		fixStationDetails(target);
+		document.getElementById("addArtistSeed").setAttribute("aria-label", "Add artist");
+		nodes = target.querySelectorAll("div.list");
+		for (var i = 0; i < nodes.length; ++i)
+			fixStationDetailsItem(nodes[i]);
 		return;
 	}
-	var node;
+	if (target.nodeName == "LI" && target.querySelector("div.list")) {
+		fixStationDetailsItem(target);
+		return;
+	}
 	if (node = document.getElementById("stationList"))
 		node.setAttribute("role", "radiogroup");
-	var nodes;
 	nodes = target.getElementsByClassName("stationListItem");
 	for (var i = 0; i < nodes.length; ++i) {
 		node = nodes[i];
