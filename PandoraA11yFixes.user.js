@@ -113,8 +113,10 @@ function init() {
 		node.setAttribute("aria-label", "Buy");
 	}
 	if (node = document.getElementsByClassName("cd_activator")[0]) {
-		node.firstChild.setAttribute("role", "button");
-		node.firstChild.setAttribute("aria-label", "Track options");
+		node = node.firstChild;
+		node.setAttribute("role", "button");
+		node.setAttribute("aria-haspopup", "true");
+		node.setAttribute("aria-label", "Track options");
 	}
 }
 
