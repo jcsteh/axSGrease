@@ -22,12 +22,14 @@ function fixButton(target) {
 	var classes = target.classList;
 	if (!classes)
 		return;
-	for (var cls in BUTTONS_LABELS) {
-		if (!classes.contains(cls))
+	for (var i = 0; i < classes.length; ++i) {
+		var cls = classes[i];
+		var label = BUTTONS_LABELS[cls];
+		if (!label)
 			continue;
 		var button = target.firstChild;
 		button.setAttribute("role", "button");
-		button.setAttribute("aria-label", BUTTONS_LABELS[cls]);
+		button.setAttribute("aria-label", label);
 		if (cls == "thumbUpButton")
 			button.setAttribute("aria-pressed",
 				classes.contains("indicator") ? "true" : "false");
