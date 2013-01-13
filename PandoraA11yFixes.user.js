@@ -5,7 +5,7 @@
 // @author James Teh <jamie@jantrid.net>
 // @copyright 2013 James Teh
 // @license GNU General Public License version 2.0
-// @version 0.20130111.01
+// @version 0.20130113.01
 // @include http://www.pandora.com/*
 // @homepageURL http://userscripts.org/scripts/show/156173
 // @updateURL https://userscripts.org/scripts/source/156173.user.js
@@ -90,7 +90,7 @@ function onNodeAdded(target) {
 
 function onStyleModified(target) {
 	var style = target.style;
-	if (target.id == "station_menu_dd" && style.visibility == "visible") {
+	if ((target.id == "station_menu_dd" || target.id == "cd_menu_dd") && style.visibility == "visible") {
 		var nodes = target.getElementsByTagName("a");
 		for (var i = 0; i < nodes.length; ++i) {
 			var node = nodes[i];
@@ -111,6 +111,10 @@ function init() {
 	if (node = document.getElementsByClassName("buyButton")[0]) {
 		node.setAttribute("role", "button");
 		node.setAttribute("aria-label", "Buy");
+	}
+	if (node = document.getElementsByClassName("cd_activator")[0]) {
+		node.firstChild.setAttribute("role", "button");
+		node.firstChild.setAttribute("aria-label", "Track options");
 	}
 }
 
