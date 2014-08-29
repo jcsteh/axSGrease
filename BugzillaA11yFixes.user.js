@@ -28,6 +28,10 @@ function tweak() {
 	// Comment numbers.
 	for (elem of document.getElementsByClassName("bz_comment_number"))
 		makeHeading(elem, 2);
+
+	// Label user images.
+	for (elem of document.querySelectorAll("span.bz_comment_user a img"))
+		elem.setAttribute("alt", "User image");
 }
 
 tweak();
