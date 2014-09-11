@@ -5,8 +5,9 @@
 // @author         James Teh <jamie@nvaccess.org>
 // @copyright 2014 James Teh
 // @license GNU General Public License version 2.0
-// @version        2014.1
+// @version        2014.1.1
 // @include */show_bug.cgi?*
+// @include */process_bug.cgi
 // ==/UserScript==
 
 function makeHeading(elem, level) {
