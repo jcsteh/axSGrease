@@ -16,6 +16,7 @@ function makeHeading(elem, level) {
 }
 
 function tweak(target) {
+	var elem;
 	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+\/([^\/]+)(\/?)/);
 	if (["issues", "pull"].indexOf(res[1]) >= 0 && res[2] == "/") {
 		// Issue or pull request.
@@ -23,9 +24,13 @@ function tweak(target) {
 		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
 			makeHeading(elem, 3);
 	} else if (res[1] == "commits" && res[2] == "/") {
-		// Commits.
+		// Commit listing.
 		// Commit group headers.
 		for (elem of target.querySelectorAll(".commit-group-title"))
+			makeHeading(elem, 2);
+	} else if (res[1] == "commit" && res[2] == "/") {
+		// Single commit.
+		if (elem = target.querySelector(".commit-title"))
 			makeHeading(elem, 2);
 	}
 }
