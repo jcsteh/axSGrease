@@ -15,7 +15,11 @@ function makeHeading(elem, level) {
 	elem.setAttribute("aria-level", level);
 }
 
-function tweak(target) {
+function onSelectMenuItemChanged(target) {
+	target.setAttribute("aria-checked", target.classList.contains("selected") ? "true" : "false");
+}
+
+function onNodeAdded(target) {
 	var elem;
 	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+\/([^\/]+)(\/?)/);
 	if (["issues", "pull"].indexOf(res[1]) >= 0 && res[2] == "/") {
@@ -33,6 +37,20 @@ function tweak(target) {
 		if (elem = target.querySelector(".commit-title"))
 			makeHeading(elem, 2);
 	}
+
+	// Site-wide stuff.
+	for (elem of target.querySelectorAll(".select-menu-item")) {
+		elem.setAttribute("role", "menuitem");
+		onSelectMenuItemChanged(elem);
+	}
+}
+
+function onClassModified(target) {
+	var classes = target.classList;
+	if (!classes)
+		return;
+	if (classes.contains("select-menu-item"))
+		onSelectMenuItemChanged(target);
 }
 
 var observer = new MutationObserver(function(mutations) {
@@ -42,8 +60,11 @@ var observer = new MutationObserver(function(mutations) {
 				for (var node of mutation.addedNodes) {
 					if (node.nodeType != Node.ELEMENT_NODE)
 						continue;
-					tweak(node);
+					onNodeAdded(node);
 				}
+			} else if (mutation.type === "attributes") {
+				if (mutation.attributeName == "class")
+					onClassModified(mutation.target);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
@@ -51,6 +72,7 @@ var observer = new MutationObserver(function(mutations) {
 		}
 	}
 });
-observer.observe(document, {childList: true, subtree: true});
+observer.observe(document, {childList: true, attributes: true,
+	subtree: true, attributeFilter: ["class"]});
 
-tweak(document);
+onNodeAdded(document);
