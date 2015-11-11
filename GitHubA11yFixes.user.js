@@ -39,16 +39,34 @@ function onNodeAdded(target) {
 	}
 
 	// Site-wide stuff.
+	// Checkable menu items; e.g. in watch and labels pop-ups.
 	for (elem of target.querySelectorAll(".select-menu-item")) {
 		elem.setAttribute("role", "menuitem");
 		onSelectMenuItemChanged(elem);
 	}
+	// Table lists; e.g. in issue listings.
+	for (elem of target.querySelectorAll(".table-list"))
+		elem.setAttribute("role", "table");
+	for (elem of target.querySelectorAll(".table-list-item"))
+		elem.setAttribute("role", "row");
+	for (elem of target.querySelectorAll(".table-list-cell"))
+		elem.setAttribute("role", "cell");
+	// Tables in Markdwn content get display: block, which causes them not to be treated as tables.
+	for (elem of target.querySelectorAll(".markdown-body table"))
+		elem.setAttribute("role", "table");
+	for (elem of target.querySelectorAll(".markdown-body tr"))
+		elem.setAttribute("role", "row");
+	for (elem of target.querySelectorAll(".markdown-body th"))
+		elem.setAttribute("role", "cell");
+	for (elem of target.querySelectorAll(".markdown-body td"))
+		elem.setAttribute("role", "cell");
 }
 
 function onClassModified(target) {
 	var classes = target.classList;
 	if (!classes)
 		return;
+	// Checkable menu items; e.g. in watch and labels pop-ups.
 	if (classes.contains("select-menu-item"))
 		onSelectMenuItemChanged(target);
 }
