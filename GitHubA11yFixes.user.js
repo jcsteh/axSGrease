@@ -23,7 +23,7 @@ function tweak(target) {
 		// Comment headers.
 		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
 			makeHeading(elem, 3);
-	} else if (res[1] == "commits" && res[2] == "/") {
+	} else if (res[1] == "commits") {
 		// Commit listing.
 		// Commit group headers.
 		for (elem of target.querySelectorAll(".commit-group-title"))
