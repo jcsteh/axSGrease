@@ -5,7 +5,7 @@
 // @author         James Teh <jamie@nvaccess.org>
 // @copyright 2015 NV Access Limited
 // @license GNU General Public License version 2.0
-// @version        2015.2
+// @version        2015.3
 // @grant GM_log
 // @include https://github.com/*
 // ==/UserScript==
