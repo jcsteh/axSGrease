@@ -60,6 +60,15 @@ function onNodeAdded(target) {
 		elem.setAttribute("role", "cell");
 	for (elem of target.querySelectorAll(".markdown-body td"))
 		elem.setAttribute("role", "cell");
+	// Tooltipped links (e.g. authors and labels in issue listings) shouldn't get the tooltip as their label.
+	for (elem of target.querySelectorAll("a.tooltipped")) {
+		if (!elem.textContent || /^\s+$/.test(elem.textContent))
+			continue;
+		var tooltip = elem.getAttribute("aria-label");
+		// This will unfortunately change the visual presentation.
+		elem.setAttribute("title", tooltip);
+		elem.removeAttribute("aria-label");
+	}
 }
 
 function onClassModified(target) {
