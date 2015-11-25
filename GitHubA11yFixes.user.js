@@ -46,6 +46,9 @@ function onNodeAdded(target) {
 	}
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
 		// Pull request or commit.
+		// Header for each changed file.
+		for (elem of target.querySelectorAll(".file-info"))
+			makeHeading(elem, 2);
 		// Lines of code which can be commented on.
 		for (elem of target.querySelectorAll(".add-line-comment")) {
 			// Put the comment button after the code instead of before.
