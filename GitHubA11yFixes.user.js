@@ -24,7 +24,10 @@ var idCounter = 0;
 
 function onNodeAdded(target) {
 	var elem;
-	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+\/([^\/]+)(\/?)/);
+	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/]+)(\/?))?/);
+	// res[1] will be "issues", "pull", "commit", etc.
+	// res[2] will be "/" if we're dealing with a single issue, pull, commit, etc.
+	// but it won't be if this is an issue listing, commit listing, etc.
 	if (["issues", "pull"].indexOf(res[1]) >= 0 && res[2] == "/") {
 		// Issue or pull request.
 		// Comment headers.
