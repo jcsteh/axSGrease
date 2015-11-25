@@ -43,6 +43,11 @@ function onNodeAdded(target) {
 		// Single commit.
 		if (elem = target.querySelector(".commit-title"))
 			makeHeading(elem, 2);
+	} else if (res[1] == "blob") {
+		// Viewing a single file.
+		// Ensure the table never gets treated as a layout table.
+		if (elem = target.querySelector(".js-file-line-container"))
+			elem.setAttribute("role", "table");
 	}
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
 		// Pull request or commit.
