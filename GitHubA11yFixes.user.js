@@ -28,12 +28,13 @@ function onNodeAdded(target) {
 	// res[1] will be "issues", "pull", "commit", etc.
 	// res[2] will be "/" if we're dealing with a single issue, pull, commit, etc.
 	// but it won't be if this is an issue listing, commit listing, etc.
-	if (["issues", "pull"].indexOf(res[1]) >= 0 && res[2] == "/") {
-		// Issue or pull request.
+	if (["issues", "pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
+		// Issue, pull request or commit.
 		// Comment headers.
 		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
 			makeHeading(elem, 3);
-	} else if (res[1] == "commits") {
+	}
+	if (res[1] == "commits") {
 		// Commit listing.
 		// Commit group headers.
 		for (elem of target.querySelectorAll(".commit-group-title"))
