@@ -19,6 +19,9 @@ function onSelectMenuItemChanged(target) {
 	target.setAttribute("aria-checked", target.classList.contains("selected") ? "true" : "false");
 }
 
+// Used when we need to generate ids for ARIA.
+var idCounter = 0;
+
 function onNodeAdded(target) {
 	var elem;
 	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+\/([^\/]+)(\/?)/);
@@ -36,6 +39,20 @@ function onNodeAdded(target) {
 		// Single commit.
 		if (elem = target.querySelector(".commit-title"))
 			makeHeading(elem, 2);
+	}
+	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
+		// Pull request or commit.
+		// Lines of code which can be commented on.
+		for (elem of target.querySelectorAll(".add-line-comment")) {
+			// Put the comment button after the code instead of before.
+			// elem is the Add line comment button.
+			elem.setAttribute("id", "axsg-alc" + idCounter);
+			// nextElementSibling is the actual code.
+			elem.nextElementSibling.setAttribute("id", "axsg-l" + idCounter);
+			// Reorder children using aria-owns.
+			elem.parentNode.setAttribute("aria-owns", "axsg-l" + idCounter + " axsg-alc" + idCounter);
+			++idCounter;
+		}
 	}
 
 	// Site-wide stuff.
