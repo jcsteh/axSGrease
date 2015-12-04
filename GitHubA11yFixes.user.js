@@ -48,6 +48,11 @@ function onNodeAdded(target) {
 		// Ensure the table never gets treated as a layout table.
 		if (elem = target.querySelector(".js-file-line-container"))
 			elem.setAttribute("role", "table");
+	} else if (res[1] == "tree" || !res[1]) {
+		// A file list is on this page.
+		// Ensure the table never gets treated as a layout table.
+		if (elem = target.querySelector(".files"))
+			elem.setAttribute("role", "table");
 	}
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
 		// Pull request or commit.
