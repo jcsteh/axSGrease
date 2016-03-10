@@ -10,9 +10,7 @@
 // ==/UserScript==
 
 function fixStar(node) {
-	node.setAttribute("role", "checkbox");
-	node.setAttribute("aria-checked",
-		(node.src.indexOf("star_on.gif") == -1) ? "false" : "true");
+	node.setAttribute("aria-label", node.getAttribute("title"));
 }
 
 function makeHeading(elem, level) {
