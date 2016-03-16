@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jamie@nvaccess.org>
-// @copyright 2015 NV Access Limited
+// @copyright 2015-2016 NV Access Limited
 // @license GNU General Public License version 2.0
-// @version        2015.3
+// @version        2016.1
 // @grant GM_log
 // @include https://github.com/*
 // ==/UserScript==
@@ -17,6 +17,23 @@ function makeHeading(elem, level) {
 
 function onSelectMenuItemChanged(target) {
 	target.setAttribute("aria-checked", target.classList.contains("selected") ? "true" : "false");
+}
+
+function onDropdownChanged(target) {
+	target.firstElementChild.setAttribute("aria-haspopup", "true");
+	var expanded = target.classList.contains("active");
+	target.children[0].setAttribute("aria-expanded",  expanded ? "true" : "false");
+	var items = target.children[1];
+	if (expanded) {
+		items.removeAttribute("aria-hidden");
+		// Focus the first item.
+		var elem = items.querySelector("a,button");
+		if (elem)
+			elem.focus();
+	} else {
+		// Make sure the items are hidden.
+		items.setAttribute("aria-hidden", "true");
+	}
 }
 
 // Used when we need to generate ids for ARIA.
@@ -103,15 +120,35 @@ function onNodeAdded(target) {
 		elem.setAttribute("title", tooltip);
 		elem.removeAttribute("aria-label");
 	}
+	// Dropdowns; e.g. for "Add your reaction".
+	if (target.classList && target.classList.contains("dropdown"))
+		onDropdownChanged(target);
+	else {
+		for (elem of target.querySelectorAll(".dropdown"))
+			onDropdownChanged(elem);
+	}
+	// Reactions.
+	for (elem of target.querySelectorAll(".add-reactions-options-item"))
+		elem.setAttribute("aria-label", elem.getAttribute("data-reaction-label"));
+	for (elem of target.querySelectorAll(".user-has-reacted")) {
+		var user = elem.getAttribute("aria-label");
+		// This will unfortunately change the visual presentation.
+		elem.setAttribute("title", user);
+		elem.setAttribute("aria-label", user + " " + elem.getAttribute("value"));
+	}
 }
 
 function onClassModified(target) {
 	var classes = target.classList;
 	if (!classes)
 		return;
-	// Checkable menu items; e.g. in watch and labels pop-ups.
-	if (classes.contains("select-menu-item"))
+	if (classes.contains("select-menu-item")) {
+		// Checkable menu items; e.g. in watch and labels pop-ups.
 		onSelectMenuItemChanged(target);
+	} else if (classes.contains("dropdown")) {
+		// Container for a dropdown.
+		onDropdownChanged(target);
+	}
 }
 
 var observer = new MutationObserver(function(mutations) {
