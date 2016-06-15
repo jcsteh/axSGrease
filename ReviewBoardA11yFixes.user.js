@@ -23,7 +23,7 @@ function tweakSideBySide(side) {
 		elem.setAttribute("role", "cell");
 
 	// For changed lines, prefix the right hand line number with off-screen text indicating the type of change.
-	for (var tbody of side.querySelectorAll("tbody.insert,tbody.replace")) {
+	for (var tbody of side.querySelectorAll("tbody.insert,tbody.replace,tbody.delete")) {
 		for (var th of tbody.querySelectorAll("tr th:nth-child(3)"))
 			th.innerHTML = '<span style="position: absolute; left: -10000px;">' + tbody.className + '</span> ' + th.innerHTML;
 	}
