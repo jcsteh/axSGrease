@@ -96,11 +96,13 @@ function onNodeAdded(target) {
 		onSelectMenuItemChanged(elem);
 	}
 	// Table lists; e.g. in issue listings.
-	for (elem of target.querySelectorAll(".table-list"))
+	for (elem of target.querySelectorAll(".Box-body"))
 		elem.setAttribute("role", "table");
-	for (elem of target.querySelectorAll(".table-list-item"))
+	for (elem of target.querySelectorAll(".d-table"))
+		elem.setAttribute("role", "presentation");
+	for (elem of target.querySelectorAll(".Box-body-row"))
 		elem.setAttribute("role", "row");
-	for (elem of target.querySelectorAll(".table-list-cell"))
+	for (elem of target.querySelectorAll(".d-table-cell"))
 		elem.setAttribute("role", "cell");
 	// Tables in Markdwn content get display: block, which causes them not to be treated as tables.
 	for (elem of target.querySelectorAll(".markdown-body table"))
