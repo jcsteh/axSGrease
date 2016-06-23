@@ -87,6 +87,9 @@ function onNodeAdded(target) {
 			elem.parentNode.setAttribute("aria-owns", "axsg-l" + idCounter + " axsg-alc" + idCounter);
 			++idCounter;
 		}
+		// Make sure diff tables never get treated as a layout table.
+		for (elem of target.querySelectorAll(".diff-table"))
+			elem.setAttribute("role", "table");
 	}
 
 	// Site-wide stuff.
