@@ -41,22 +41,22 @@ var idCounter = 0;
 
 function onNodeAdded(target) {
 	var elem;
-	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/]+)(\/?))?/);
+	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/]+))?(?:\/([^\/]+))?(?:\/([^\/]+))?(?:\/([^\/]+))?/);
+	// res[1] to res[4] are 4 path components of the URL after the project.
 	// res[1] will be "issues", "pull", "commit", etc.
-	// res[2] will be "/" if we're dealing with a single issue, pull, commit, etc.
-	// but it won't be if this is an issue listing, commit listing, etc.
-	if (["issues", "pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
+	// Empty path components will be undefined.
+	if (["issues", "pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
 		// Issue, pull request or commit.
 		// Comment headers.
 		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
 			makeHeading(elem, 3);
 	}
-	if (res[1] == "commits") {
+	if (res[1] == "commits" || (res[1] == "pull" && res[3] == "commits" && !res[4])) {
 		// Commit listing.
 		// Commit group headers.
 		for (elem of target.querySelectorAll(".commit-group-title"))
 			makeHeading(elem, 2);
-	} else if (res[1] == "commit" && res[2] == "/") {
+	} else if ((res[1] == "commit" && res[2]) || (res[1] == "pull" && res[3] == "commits" && res[4])) {
 		// Single commit.
 		if (elem = target.querySelector(".commit-title"))
 			makeHeading(elem, 2);
@@ -71,7 +71,7 @@ function onNodeAdded(target) {
 		if (elem = target.querySelector(".files"))
 			elem.setAttribute("role", "table");
 	}
-	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2] == "/") {
+	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
 		// Pull request or commit.
 		// Header for each changed file.
 		for (elem of target.querySelectorAll(".file-info"))
