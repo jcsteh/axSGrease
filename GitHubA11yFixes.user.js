@@ -41,7 +41,7 @@ var idCounter = 0;
 
 function onNodeAdded(target) {
 	var elem;
-	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/]+))?(?:\/([^\/]+))?(?:\/([^\/]+))?(?:\/([^\/]+))?/);
+	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?/);
 	// res[1] to res[4] are 4 path components of the URL after the project.
 	// res[1] will be "issues", "pull", "commit", etc.
 	// Empty path components will be undefined.
@@ -70,6 +70,11 @@ function onNodeAdded(target) {
 		// Ensure the table never gets treated as a layout table.
 		if (elem = target.querySelector(".files"))
 			elem.setAttribute("role", "table");
+	} else if (res[1] == "compare") {
+		// Branch selector buttons.
+		// These have an aria-label which masks the name of the branch, so kill it.
+		for (elem of target.querySelectorAll("button.branch"))
+			elem.removeAttribute("aria-label");
 	}
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
 		// Pull request or commit.
