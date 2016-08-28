@@ -73,7 +73,7 @@ function onNodeAdded(target) {
 	} else if (res[1] == "compare") {
 		// Branch selector buttons.
 		// These have an aria-label which masks the name of the branch, so kill it.
-		for (elem of target.querySelectorAll("button.branch"))
+		for (elem of target.querySelectorAll("button.select-menu-button"))
 			elem.removeAttribute("aria-label");
 	}
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
