@@ -108,8 +108,15 @@ function onNodeAdded(target) {
 		elem.setAttribute("role", "table");
 	for (elem of target.querySelectorAll(".d-table"))
 		elem.setAttribute("role", "presentation");
-	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row"))
+	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row")){
 		elem.setAttribute("role", "row");
+		/*For these tables, the columns may have no useful class to match on for each table col. 
+		After going down n levels past any elements with role of presentation, just set the direct children as columns. */
+		while(elem. firstElementChild.getAttribute("role") == "presentation") elem = elem.firstElementChild;
+		for(col of elem.children){
+			col.setAttribute("role", "cell");
+		}
+	}
 	for (elem of target.querySelectorAll(".table-list-cell,.d-table-cell"))
 		elem.setAttribute("role", "cell");
 	// Tables in Markdwn content get display: block, which causes them not to be treated as tables.
