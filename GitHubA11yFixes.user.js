@@ -106,13 +106,19 @@ function onNodeAdded(target) {
 	// Table lists; e.g. in issue and commit listings.
 	for (elem of target.querySelectorAll(".table-list,.Box-body"))
 		elem.setAttribute("role", "table");
-	for (elem of target.querySelectorAll(".d-table"))
-		elem.setAttribute("role", "presentation");
 	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row"))
 		elem.setAttribute("role", "row");
-	for (elem of target.querySelectorAll(".table-list-cell,.d-table-cell"))
+	for (elem of target.querySelectorAll(".d-table")) {
+		// There's one of these inside every .Box-body-row.
+		// It's purely presentational.
+		elem.setAttribute("role", "presentation");
+		// Its children are the cells, but they have no common class.
+		for (elem of elem.children)
+			elem.setAttribute("role", "cell");
+	}
+	for (elem of target.querySelectorAll(".table-list-cell"))
 		elem.setAttribute("role", "cell");
-	// Tables in Markdwn content get display: block, which causes them not to be treated as tables.
+	// Tables in Markdown content get display: block, which causes them not to be treated as tables.
 	for (elem of target.querySelectorAll(".markdown-body table"))
 		elem.setAttribute("role", "table");
 	for (elem of target.querySelectorAll(".markdown-body tr"))
