@@ -104,9 +104,9 @@ function onNodeAdded(target) {
 		onSelectMenuItemChanged(elem);
 	}
 	// Table lists; e.g. in issue and commit listings.
-	for (elem of target.querySelectorAll(".table-list,.Box-body"))
+	for (elem of target.querySelectorAll(".table-list,.Box-body,ul.js-navigation-container"))
 		elem.setAttribute("role", "table");
-	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row"))
+	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row,.Box-row"))
 		elem.setAttribute("role", "row");
 	for (elem of target.querySelectorAll(".d-table")) {
 		// There's one of these inside every .Box-body-row.
