@@ -45,7 +45,7 @@ function onNodeAdded(target) {
 	// res[1] to res[4] are 4 path components of the URL after the project.
 	// res[1] will be "issues", "pull", "commit", etc.
 	// Empty path components will be undefined.
-	if (["issues", "pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
+	if (["issues", "pull", "commit", "compare"].indexOf(res[1]) >= 0 && res[2]) {
 		// Issue, pull request or commit.
 		// Comment headers.
 		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
