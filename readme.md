@@ -69,4 +69,5 @@ It does the following:
 - Makes star controls (and their statuses) accessible.
 - Makes the close link for the about channel pane accessible.
 - Makes day separators in the message history and the about channel pane heading accessible as headings.
+- Reports incoming messages automatically (using a live region).
 - Hides an editable area which isn't shown visually.

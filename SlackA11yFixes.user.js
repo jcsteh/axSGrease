@@ -33,11 +33,26 @@ function setStarred(elem) {
 		elem.classList.contains("starred") ? "true" : "false");
 }
 
+function message(text) {
+	var live = document.getElementById("aria_live_announcer");
+	live.textContent = text;
+}
+
 function onNodeAdded(target) {
 	if (target.matches(".offscreen[contenteditable]")) {
 		// Hidden contentEditable near the bottom which doesn't seem to be relevant to the user.
 		target.setAttribute("role", "presentation");
 		return;
+	}
+	// Report incoming messages.
+	if (target.matches("#msgs_div .message") && !target.classList.contains("unprocessed")) {
+		// Just shove text into a live region that's already used for stuff like this.
+		// It'd better/less hacky if the messages area itself were a live region,
+		// but doing this results in double/triple speaking for some reason.
+		// We also don't want the time reported in this case.
+		sender = target.querySelector(".message_sender").textContent;
+		body = target.querySelector(".message_body").textContent;
+		message(sender + " " + body);
 	}
 	var elem;
 	for (elem of target.querySelectorAll(".copy_only")) {
