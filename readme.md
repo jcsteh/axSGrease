@@ -71,3 +71,11 @@ It does the following:
 - Makes day separators in the message history and the about channel pane heading accessible as headings.
 - Reports incoming messages automatically (using a live region).
 - Hides an editable area which isn't shown visually.
+
+### Telegram accessibility fixes
+[Download Telegram Accessibility Fixes](https://github.com/nvaccess/axSGrease/raw/master/telegram.user.js)
+
+This script improves the accessibility of the [Telegram instant messaging](https://web.telegram.org/) web interface.
+
+it so far does the following:
+- marks the chat history as a live region so new messages are announced automatically
