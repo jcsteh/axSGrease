@@ -65,6 +65,7 @@ This script improves the accessibility of [Slack](https://www.slack.com/).
 It does the following:
 
 - Reorders some elements which appear in the wrong place for accessibility. For example, using this script, the input area appears near the bottom of the page as it does visually instead of at the top.
+- Makes messages accessible as list items.
 - Makes message timestamps appear on a single line instead of crossing several lines.
 - Makes star controls (and their statuses) accessible.
 - Makes the close link for the about channel pane accessible.

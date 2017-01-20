@@ -44,7 +44,7 @@ function onNodeAdded(target) {
 		target.setAttribute("role", "presentation");
 		return;
 	}
-	// Report incoming messages.
+	// Report incoming messages and make them list items.
 	if (target.matches("#msgs_div .message") && !target.classList.contains("unprocessed")) {
 		// Just shove text into a live region that's already used for stuff like this.
 		// It'd better/less hacky if the messages area itself were a live region,
@@ -53,8 +53,12 @@ function onNodeAdded(target) {
 		sender = target.querySelector(".message_sender").textContent;
 		body = target.querySelector(".message_body").textContent;
 		message(sender + " " + body);
+		target.setAttribute("role", "listitem");
 	}
 	var elem;
+	// Make existing messages lit items.
+	for (elem of target.querySelectorAll("#msgs_div .message"))
+		elem.setAttribute("role", "listitem");
 	for (elem of target.querySelectorAll(".copy_only")) {
 		// This includes text such as the brackets around message times.
 		// These chunks of text are block elements, even though they're on the same line.
