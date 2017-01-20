@@ -108,8 +108,8 @@ function onNodeAdded(target) {
 		elem.setAttribute("role", "table");
 	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row,.Box-row"))
 		elem.setAttribute("role", "row");
-	for (elem of target.querySelectorAll(".d-table")) {
-		// There's one of these inside every .Box-body-row.
+	for (elem of target.querySelectorAll(".Box-body-row,.Box-row .d-table")) {
+		// There's one of these inside every .Box-body-row/Box-row.
 		// It's purely presentational.
 		elem.setAttribute("role", "presentation");
 		// Its children are the cells, but they have no common class.
