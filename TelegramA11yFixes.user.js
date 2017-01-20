@@ -3,9 +3,9 @@
 // @namespace      http://axSGrease.nvaccess.org/
 // @description    Improves the accessibility of Telegram.
 // @author         Michael Curran <mick@nvaccess.org>
-// @copyright 2016 NV Access Limited
+// @copyright 2017 NV Access Limited
 // @license GNU General Public License version 2.0
-// @version        2016.1
+// @version        2017.1
 // @grant GM_log
 // @include https://web.telegram.org/*
 // ==/UserScript==
