@@ -95,6 +95,9 @@ function onNodeAdded(target) {
 		// Make sure diff tables never get treated as a layout table.
 		for (elem of target.querySelectorAll(".diff-table"))
 			elem.setAttribute("role", "table");
+		// Review comment headers.
+		for (elem of target.querySelectorAll(".review-comment-contents > strong"))
+			makeHeading(elem, 3);
 	}
 
 	// Site-wide stuff.
