@@ -39,6 +39,12 @@ function message(text) {
 }
 
 function onNodeAdded(target) {
+	if (target.classList.contains("ts_icon")) {
+		// Icon with tooltip such as the options which appear when you mouse over a message.
+		target.setAttribute("role", "button");
+		target.setAttribute("aria-label", target.getAttribute("title"));
+		return;
+	}
 	if (target.matches(".offscreen[contenteditable]")) {
 		// Hidden contentEditable near the bottom which doesn't seem to be relevant to the user.
 		target.setAttribute("role", "presentation");
