@@ -18,7 +18,7 @@ function initial() {
 		elem.setAttribute("aria-owns", "messages_container footer");
 	// Same for the unread messages status, which appears below in DOM order but earlier visually.
 	if (elem = document.querySelector("#messages_container"))
-		elem.setAttribute("aria-owns", "messages_unread_status monkey_scroll_wrapper_for_msgs_scroller_div");
+		elem.setAttribute("aria-owns", "messages_unread_status threads_view_banner monkey_scroll_wrapper_for_msgs_scroller_div monkey_scroll_wrapper_for_threads_msgs_scroller_div");
 	// Make close link for about channel pane accessible.
 	for (elem of document.querySelectorAll(".close_flexpane")) {
 		elem.setAttribute("role", "button");
@@ -51,7 +51,7 @@ function onNodeAdded(target) {
 		return;
 	}
 	// Report incoming messages and make them list items.
-	if (target.matches("#msgs_div .message") && !target.classList.contains("unprocessed")) {
+	if (target.matches("#msgs_div .message:last-child, #threads_msgs .message:last-child, #convo_container .message:last-child") && !target.classList.contains("unprocessed")) {
 		// Just shove text into a live region that's already used for stuff like this.
 		// It'd better/less hacky if the messages area itself were a live region,
 		// but doing this results in double/triple speaking for some reason.
@@ -62,8 +62,8 @@ function onNodeAdded(target) {
 		target.setAttribute("role", "listitem");
 	}
 	var elem;
-	// Make existing messages lit items.
-	for (elem of target.querySelectorAll("#msgs_div .message"))
+	// Make existing messages list items.
+	for (elem of target.querySelectorAll("#msgs_div .message, #threads_msgs .message, #convo_container .message"))
 		elem.setAttribute("role", "listitem");
 	for (elem of target.querySelectorAll(".copy_only")) {
 		// This includes text such as the brackets around message times.
