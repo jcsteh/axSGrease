@@ -71,7 +71,6 @@ It does the following:
 - Makes options for each message (Start a thread, Share message, etc.) accessible.
  To access these, move the mouse to the text of a message.
  They then appear above the author's name as buttons.
-- Makes the close link for the about channel pane accessible.
 - Makes day separators in the message history and the about channel pane heading accessible as headings.
 - Reports incoming messages automatically (using a live region).
 - Hides an editable area which isn't shown visually.
