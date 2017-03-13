@@ -3,9 +3,9 @@
 // @namespace      http://axSGrease.nvaccess.org/
 // @description    Improves the accessibility of Google Code.
 // @author James Teh <jamie@nvaccess.org>
-// @copyright 2016 NV Access Limited
+// @copyright 2016-2017 NV Access Limited
 // @license GNU General Public License version 2.0
-// @version 2016.1
+// @version 2017.1
 // @include https://bugs.chromium.org/p/*/issues/*
 // ==/UserScript==
 
@@ -48,5 +48,10 @@ var observer = new MutationObserver(function(mutations) {
 observer.observe(document, {attributes: true,
 	subtree: true, attributeFilter: ["src"]});
 
-fixStar(document.getElementById("star"));
-makeHeadings();
+function initial() {
+	var star = document.getElementById("star");
+	if (star)
+		fixStar(star);
+	makeHeadings();
+}
+initial();
