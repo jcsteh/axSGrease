@@ -81,6 +81,10 @@ function onNodeAdded(target) {
 		elem.setAttribute("role", "heading");
 		elem.setAttribute("aria-level", "2");
 	}
+	// The message editor is a contentEditable div.
+	// Slack does set the role, but to an invalid value of "textarea".
+	if (elem = document.querySelector(".ql-editor"))
+		elem.setAttribute("role", "textbox");
 }
 
 function onClassModified(target) {
