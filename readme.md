@@ -84,3 +84,15 @@ This script improves the accessibility of the [Telegram instant messaging](https
 It so far does the following:
 
 - Marks the chat history as a live region so new messages are announced automatically.
+
+### Trello Accessibility Fixes
+[Download Trello Accessibility Fixes](https://github.com/nvaccess/axSGrease/raw/master/TrelloA11yFixes.user.js)
+
+This script improves the accessibility of [Trello](https://trello.com/).
+It does the following:
+
+- Makes lists and cards accessible as lists and list items, respectively.
+- Focuses the active card when moving between lists and cards with the arrow keys.
+ If you are using a screen reader, you will need to ensure that the arrow keys are passed to the application to make use of this.
+ For NVDA, you can achieve this by switching to focus mode to move through cards.
+- Labels badges in cards.
