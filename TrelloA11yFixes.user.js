@@ -41,6 +41,9 @@ function onNodeAdded(target) {
 			var id = "axsg-lh" + idCounter++;
 			header.setAttribute("id", id);
 			list.setAttribute("aria-labelledby", id);
+			// Make the header's container into a heading.
+			header.parentNode.setAttribute("role", "heading");
+			header.parentNode.setAttribute("aria-level", "2");
 		}
 	}
 	for (var card of target.querySelectorAll(".list-card")) {
