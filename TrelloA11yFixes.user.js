@@ -6,7 +6,7 @@
 // @copyright 2017 NV Access Limited
 // @license GNU General Public License version 2.0
 // @version        2017.1
-// @grant GM_log
+// @grant GM_log
 // @include https://trello.com/b/*
 // ==/UserScript==
 
