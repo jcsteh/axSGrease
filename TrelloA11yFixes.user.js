@@ -7,7 +7,7 @@
 // @license GNU General Public License version 2.0
 // @version        2017.1
 // @grant GM_log
-// @include https://trello.com/b/*
+// @include https://trello.com/*
 // ==/UserScript==
 
 // Used when we need to generate ids for ARIA.
