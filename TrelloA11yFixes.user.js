@@ -13,7 +13,18 @@
 // Used when we need to generate ids for ARIA.
 var idCounter = 0;
 
+function tweakCard(card) {
+	// Make this a focusable list item.
+	card.setAttribute("tabindex", "-1");
+	card.setAttribute("role", "listitem");
+}
+
 function onNodeAdded(target) {
+	if (target.classList.contains("list-card")) {
+		// A card just got added.
+		tweakCard(target);
+		return;
+	}
 	if (target.classList.contains("badge")) {
 		// Label badges.
 		var label = target.getAttribute("title");
@@ -33,9 +44,7 @@ function onNodeAdded(target) {
 		}
 	}
 	for (var card of target.querySelectorAll(".list-card")) {
-		// Make this a focusable list item.
-		card.setAttribute("tabindex", "-1");
-		card.setAttribute("role", "listitem");
+		tweakCard(card);
 	}
 }
 
