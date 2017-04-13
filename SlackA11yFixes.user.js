@@ -19,12 +19,6 @@ function initial() {
 	// Same for the unread messages status, which appears below in DOM order but earlier visually.
 	if (elem = document.querySelector("#messages_container"))
 		elem.setAttribute("aria-owns", "messages_unread_status threads_view_banner monkey_scroll_wrapper_for_msgs_scroller_div monkey_scroll_wrapper_for_threads_msgs_scroller_div");
-	// Make close link for about channel pane accessible.
-	for (elem of document.querySelectorAll(".close_flexpane")) {
-		elem.setAttribute("role", "button");
-		// The content is a private use Unicode character. Use the title as the name.
-		elem.setAttribute("aria-label", elem.getAttribute("title"));
-	}
 }
 
 // Make the starred status accessible.
