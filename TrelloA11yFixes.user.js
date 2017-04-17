@@ -33,6 +33,12 @@ function onNodeAdded(target) {
 		target.setAttribute("aria-label", label);
 		return;
 	}
+	if (target.id == "clipboard") {
+		// Pressing control focuses a contentEditable div for clipboard stuff,
+		// but this causes screen reader users to lose their position.
+		target.blur();
+		return;
+	}
 	for (var list of target.querySelectorAll(".list")) {
 		list.setAttribute("role", "list");
 		var header = list.querySelector(".list-header-name");

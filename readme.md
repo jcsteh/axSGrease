@@ -96,3 +96,4 @@ It does the following:
  For NVDA, you can achieve this by switching to focus mode to move through cards.
 - Labels badges in cards.
 - Makes list headers accessible as headings.
+- Prevents loss of position for screen reader users when pressing the control key.
