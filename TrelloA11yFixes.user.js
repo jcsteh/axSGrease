@@ -88,3 +88,37 @@ var observer = new MutationObserver(function(mutations) {
 });
 observer.observe(document, {childList: true, attributes: true,
 	subtree: true, attributeFilter: ["class"]});
+
+function moveCard() {
+	// Open the quick editor.
+	var op = document.querySelector(".active-card .list-card-operation");
+	if (!op) {
+		return;
+	}
+	op.click();
+	// Click the Move button.
+	var move = document.querySelector(".js-move-card");
+	if (!move) {
+		return;
+	}
+	move.click();
+	// Focus the list selector.
+	// This doesn't work if we don't delay it. Not quite sure why.
+	setTimeout(function() {
+		var sel = document.querySelector(".js-select-list");
+		if (!sel) {
+			return;
+		}
+		sel.focus();
+	}, 50);
+}
+
+// Add some keyboard shortcuts.
+document.addEventListener("keydown", function(evt) {
+	if (document.activeElement.nodeName == "INPUT" || document.activeElement.isContentEditable) {
+		return false;
+	}
+	if (evt.key == "M") {
+		moveCard();
+	}
+});

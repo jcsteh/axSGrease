@@ -97,3 +97,4 @@ It does the following:
 - Labels badges in cards.
 - Makes list headers accessible as headings.
 - Prevents loss of position for screen reader users when pressing the control key.
+- Adds a shift+m keyboard shortcut to quickly move a card.
