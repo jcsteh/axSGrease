@@ -115,7 +115,7 @@ function moveCard() {
 
 // Add some keyboard shortcuts.
 document.addEventListener("keydown", function(evt) {
-	if (document.activeElement.nodeName == "INPUT" || document.activeElement.isContentEditable) {
+	if (document.activeElement.nodeName == "INPUT" || document.activeElement.nodeName == "TEXTAREA" || document.activeElement.isContentEditable) {
 		return false;
 	}
 	if (evt.key == "M") {
