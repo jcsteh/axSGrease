@@ -12,6 +12,14 @@
 
 // Used when we need to generate ids for ARIA.
 var idCounter = 0;
+// Get a node's id. If it doesn't have one, make and set one first.
+function getAriaId(elem) {
+	if (elem.id) {
+		return elem.id;
+	}
+	elem.setAttribute("id", "axsg-" + idCounter++);
+	return elem.id;
+}
 
 function makeHeading(elem, level) {
 	elem.setAttribute("role", "heading");
@@ -22,6 +30,21 @@ function tweakCard(card) {
 	// Make this a focusable list item.
 	card.setAttribute("tabindex", "-1");
 	card.setAttribute("role", "listitem");
+}
+
+// Make checklists accessible.
+function tweakCheckItem(checkItem, isNew) {
+	var checkbox = checkItem.querySelector(".checklist-item-checkbox-check");
+	if (isNew) {
+		checkbox.setAttribute("role", "checkbox");
+		checkbox.setAttribute("tabindex", "-1");
+		var checkLabel = checkItem.querySelector(".checklist-item-details-text");
+		if (checkLabel) {
+			checkbox.setAttribute("aria-labelledby", getAriaId(checkLabel));
+		}
+	}
+	var complete = checkItem.classList.contains("checklist-item-state-complete");
+	checkbox.setAttribute("aria-checked", complete ? "true" : "false");
 }
 
 function onNodeAdded(target) {
@@ -44,14 +67,17 @@ function onNodeAdded(target) {
 		target.blur();
 		return;
 	}
+	if (target.classList.contains("checklist-item")) {
+		// A checklist item just got added.
+		tweakCheckItem(target, true);
+		return;
+	}
 	for (var list of target.querySelectorAll(".list")) {
 		list.setAttribute("role", "list");
 		var header = list.querySelector(".list-header-name");
 		if (header) {
 			// Label the list with its header.
-			var id = "axsg-lh" + idCounter++;
-			header.setAttribute("id", id);
-			list.setAttribute("aria-labelledby", id);
+			list.setAttribute("aria-labelledby", getAriaId(header));
 			// Make the header's container into a heading.
 			makeHeading(header, 2);
 		}
@@ -64,6 +90,9 @@ function onNodeAdded(target) {
 		// to facilitate quick jumping between activity items.
 		makeHeading(activityCreator, 4);
 	}
+	for (var checkItem of target.querySelectorAll(".checklist-item")) {
+		tweakCheckItem(checkItem, true);
+	}
 }
 
 function onClassModified(target) {
@@ -73,6 +102,8 @@ function onClassModified(target) {
 	if (classes.contains("active-card")) {
 		// When the active card changes, focus it.
 		target.focus();
+	} else if (classes.contains("checklist-item")) {
+		tweakCheckItem(target, false);
 	}
 }
 

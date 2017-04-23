@@ -98,3 +98,4 @@ It does the following:
 - Makes list headers and activity item headers accessible as headings.
 - Prevents loss of position for screen reader users when pressing the control key.
 - Adds a shift+m keyboard shortcut to quickly move a card.
+- Makes checklists accessible.
