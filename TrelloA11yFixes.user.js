@@ -13,6 +13,11 @@
 // Used when we need to generate ids for ARIA.
 var idCounter = 0;
 
+function makeHeading(elem, level) {
+	elem.setAttribute("role", "heading");
+	elem.setAttribute("aria-level", level);
+}
+
 function tweakCard(card) {
 	// Make this a focusable list item.
 	card.setAttribute("tabindex", "-1");
@@ -48,12 +53,16 @@ function onNodeAdded(target) {
 			header.setAttribute("id", id);
 			list.setAttribute("aria-labelledby", id);
 			// Make the header's container into a heading.
-			header.parentNode.setAttribute("role", "heading");
-			header.parentNode.setAttribute("aria-level", "2");
+			makeHeading(header, 2);
 		}
 	}
 	for (var card of target.querySelectorAll(".list-card")) {
 		tweakCard(card);
+	}
+	for (var activityCreator of target.querySelectorAll(".phenom-creator")) {
+		// Make the creator of an activity item into a heading
+		// to facilitate quick jumping between activity items.
+		makeHeading(activityCreator, 4);
 	}
 }
 

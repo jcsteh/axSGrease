@@ -95,6 +95,6 @@ It does the following:
  If you are using a screen reader, you will need to ensure that the arrow keys are passed to the application to make use of this.
  For NVDA, you can achieve this by switching to focus mode to move through cards.
 - Labels badges in cards.
-- Makes list headers accessible as headings.
+- Makes list headers and activity item headers accessible as headings.
 - Prevents loss of position for screen reader users when pressing the control key.
 - Adds a shift+m keyboard shortcut to quickly move a card.
