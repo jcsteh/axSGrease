@@ -99,3 +99,4 @@ It does the following:
 - Prevents loss of position for screen reader users when pressing the control key.
 - Adds a shift+m keyboard shortcut to quickly move a card.
 - Makes checklists accessible.
+- Makes the checkbox for due date completion accessible.

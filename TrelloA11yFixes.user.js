@@ -47,6 +47,17 @@ function tweakCheckItem(checkItem, isNew) {
 	checkbox.setAttribute("aria-checked", complete ? "true" : "false");
 }
 
+function tweakDueDateComplete(completeBadge, isNew) {
+	var checkbox = completeBadge.querySelector(".card-detail-badge-due-date-complete-box");
+	if (isNew) {
+		checkbox.setAttribute("role", "checkbox");
+		checkbox.setAttribute("tabindex", "-1");
+		checkbox.setAttribute("aria-label", "Complete");
+	}
+	var complete = completeBadge.classList.contains("is-due-complete");
+	checkbox.setAttribute("aria-checked", complete ? "true" : "false");
+}
+
 function onNodeAdded(target) {
 	if (target.classList.contains("list-card")) {
 		// A card just got added.
@@ -93,6 +104,9 @@ function onNodeAdded(target) {
 	for (var checkItem of target.querySelectorAll(".checklist-item")) {
 		tweakCheckItem(checkItem, true);
 	}
+	for (var dueComplete of target.querySelectorAll(".card-detail-due-date-badge")) {
+		tweakDueDateComplete(dueComplete, true);
+	}
 }
 
 function onClassModified(target) {
@@ -104,6 +118,8 @@ function onClassModified(target) {
 		target.focus();
 	} else if (classes.contains("checklist-item")) {
 		tweakCheckItem(target, false);
+	} else if (classes.contains("card-detail-due-date-badge")) {
+		tweakDueDateComplete(target, false);
 	}
 }
 
