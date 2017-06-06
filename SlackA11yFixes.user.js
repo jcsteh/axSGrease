@@ -84,6 +84,10 @@ function onNodeAdded(target) {
 		elem.setAttribute("role", "heading");
 		elem.setAttribute("aria-level", "2");
 	}
+	// Kill some extraneous white space.
+	for (elem of target.querySelectorAll(".message_gutter, i.copy_only br")) {
+		elem.setAttribute("aria-hidden", "true");
+	}
 }
 
 function onClassModified(target) {
