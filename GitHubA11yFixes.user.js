@@ -103,7 +103,7 @@ function onNodeAdded(target) {
 	// Site-wide stuff.
 	// Checkable menu items; e.g. in watch and labels pop-ups.
 	for (elem of target.querySelectorAll(".select-menu-item")) {
-		elem.setAttribute("role", "menuitem");
+		elem.setAttribute("role", "menuitemcheckbox");
 		onSelectMenuItemChanged(elem);
 	}
 	// Table lists; e.g. in issue and commit listings.
