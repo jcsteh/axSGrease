@@ -17,8 +17,17 @@ function initial() {
 	if (elem = document.querySelector("#col_messages"))
 		elem.setAttribute("aria-owns", "messages_container footer");
 	// Same for the unread messages status, which appears below in DOM order but earlier visually.
-	if (elem = document.querySelector("#messages_container"))
-		elem.setAttribute("aria-owns", "messages_unread_status threads_view_banner monkey_scroll_wrapper_for_msgs_scroller_div monkey_scroll_wrapper_for_threads_msgs_scroller_div");
+	if (elem = document.querySelector("#messages_container")) {
+		// We must specify all children so we can guarantee the order.
+		// The children have different ids in Firefox and Chrome.
+		var owns = "messages_unread_status";
+		for (var child of elem.children) {
+			if (child.id && child.id != "messages_unread_status") {
+				owns += " " + child.id;
+			}
+		}
+		elem.setAttribute("aria-owns", owns);
+	}
 }
 
 // Make the starred status accessible.
