@@ -3,11 +3,16 @@
 - Author: James Teh &lt;jamie@nvaccess.org&gt; & other contributors
 - Copyright: 2011-2017 NV Access Limited
 
-AxSGrease is a set of [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) scripts to improve the accessibility of various websites.
+AxSGrease is a set of user scripts (also known as GreaseMonkey scripts) to improve the accessibility of various websites.
 
 ## Installation
-Before you can install any of these scripts, you must first install [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
-Once that is done, simply activate the download link for the relevant script below to download and install it.
+Before you can install any of these scripts, you must first install a user script manager for your browser.
+For Firefox, you can install [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
+For Chrome, you can install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
+There are also user script managers for other browsers.
+See [Greasy Fork's page on How to install user scripts](https://greasyfork.org/en/help/installing-user-scripts) for more details.
+
+Once you have a user script manager installed, simply activate the download link for the relevant script below to download and install it.
 
 ## Scripts
 Following is information about each script.
