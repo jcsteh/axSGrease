@@ -66,7 +66,7 @@ function onNodeAdded(target) {
 	}
 	var elem;
 	// Make existing messages list items.
-	for (elem of target.querySelectorAll("#msgs_div .message, #threads_msgs .message, #convo_container .message"))
+	for (elem of target.querySelectorAll("#msgs_div .message, #threads_msgs .message, #convo_container .message, #search_results_container .message"))
 		elem.setAttribute("role", "listitem");
 	for (elem of target.querySelectorAll(".copy_only")) {
 		// This includes text such as the brackets around message times.
@@ -79,10 +79,15 @@ function onNodeAdded(target) {
 		elem.setAttribute("aria-label", "star");
 		setStarred(elem);
 	}
-	// Make headings for day separators in message history, about channel pane heading.
-	for (elem of target.querySelectorAll(".day_divider,.heading")) {
+	// Make the current channel title a level 2 heading.
+	if (elem = target.querySelector("#channel_title")) {
 		elem.setAttribute("role", "heading");
 		elem.setAttribute("aria-level", "2");
+	}
+	// Make level3 headings for day separators in message history, individual search results, individual threads in All Threads.
+	for (elem of target.querySelectorAll(".day_divider, .search_result_header, .thread_header")) {
+		elem.setAttribute("role", "heading");
+		elem.setAttribute("aria-level", "3");
 	}
 	// Kill some extraneous white space.
 	for (elem of target.querySelectorAll(".message_gutter, .message_content > i.copy_only br")) {
