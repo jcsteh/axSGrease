@@ -36,9 +36,16 @@ function setStarred(elem) {
 		elem.classList.contains("starred") ? "true" : "false");
 }
 
-function message(text) {
+function message(text, suppressRepeats) {
 	var live = document.getElementById("aria_live_announcer");
-	live.textContent = text;
+	if (suppressRepeats && live.textContent == text) {
+		return;
+	}
+	// Use a new div so this is treated as an addition, not a text change.
+	// Otherwise, the browser will attempt to calculate a diff between old and new text,
+	// which could result in partial reporting or nothing depending on the previous text.
+	live.innerHTML = "<div></div>";
+	live.firstChild.textContent = text;
 }
 
 function onNodeAdded(target) {
@@ -102,6 +109,13 @@ function onClassModified(target) {
 	if (classes.contains("star")) {
 		// Starred state changed.
 		setStarred(target);
+	} else if (classes.contains("highlighted")) {
+		// Autocomplete selection.
+		// We use a live region because ARIA autocompletes don't work so well
+		// for a control which selects the first item as you type.
+		// This gets fired every time you type, even if the item doesn't change.
+		// Therefore, suppress repeated reports.
+		message(target.textContent, true);
 	}
 }
 

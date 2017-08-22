@@ -79,6 +79,7 @@ It does the following:
 - Makes the current channel title, day separators in the message history, the headers of individual search results and the headers of individual threads in All Threads accessible as headings.
 - Reports incoming messages automatically (using a live region).
 - Hides an editable area which isn't shown visually.
+- Reports suggestions in various autocompletes such as the Quick Switcher and direct messages menu.
 
 ### Telegram accessibility fixes
 [Download Telegram Accessibility Fixes](https://github.com/nvaccess/axSGrease/raw/master/TelegramA11yFixes.user.js)
