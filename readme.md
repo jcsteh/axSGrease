@@ -76,7 +76,7 @@ It does the following:
 - Makes options for each message (Start a thread, Share message, etc.) accessible.
  To access these, move the mouse to the text of a message.
  They then appear above the author's name as buttons.
-- Makes the current channel title, day separators in the message history, the headers of individual search results and the headers of individual threads in All Threads accessible as headings.
+- Makes the current channel/direct message title, day separators in the message history, the headers of individual search results and the headers of individual threads in All Threads accessible as headings.
 - Reports incoming messages automatically (using a live region).
 - Hides an editable area which isn't shown visually.
 - Reports suggestions in various autocompletes such as the Quick Switcher and direct messages menu.

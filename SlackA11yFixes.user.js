@@ -10,7 +10,12 @@
 // @include https://*.slack.com/*
 // ==/UserScript==
 
-function initial() {
+function makeHeading(elem, level) {
+	elem.setAttribute("role", "heading");
+	elem.setAttribute("aria-level", level);
+}
+
+	function initial() {
 	var elem;
 	// In DOM order, the footer is earlier than the messages.
 	// Put it below for a11y (as it appears visually).
@@ -86,15 +91,13 @@ function onNodeAdded(target) {
 		elem.setAttribute("aria-label", "star");
 		setStarred(elem);
 	}
-	// Make the current channel title a level 2 heading.
-	if (elem = target.querySelector("#channel_title")) {
-		elem.setAttribute("role", "heading");
-		elem.setAttribute("aria-level", "2");
+	// Make the current channel/direct message title a level 2 heading.
+	for (elem of target.querySelectorAll("#channel_title, #im_title")) {
+		makeHeading(elem, 2);
 	}
 	// Make level3 headings for day separators in message history, individual search results, individual threads in All Threads.
 	for (elem of target.querySelectorAll(".day_divider, .search_result_header, .thread_header")) {
-		elem.setAttribute("role", "heading");
-		elem.setAttribute("aria-level", "3");
+		makeHeading(elem, 3);
 	}
 	// Kill some extraneous white space.
 	for (elem of target.querySelectorAll(".message_gutter, .message_content > i.copy_only br")) {
