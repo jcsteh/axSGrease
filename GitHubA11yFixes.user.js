@@ -22,8 +22,11 @@ function onSelectMenuItemChanged(target) {
 function onDropdownChanged(target) {
 	target.firstElementChild.setAttribute("aria-haspopup", "true");
 	var expanded = target.classList.contains("active");
-	target.children[0].setAttribute("aria-expanded",  expanded ? "true" : "false");
+	target.firstElementChild.setAttribute("aria-expanded",  expanded ? "true" : "false");
 	var items = target.children[1];
+	if (!items) {
+		return;
+	}
 	if (expanded) {
 		items.removeAttribute("aria-hidden");
 		// Focus the first item.
