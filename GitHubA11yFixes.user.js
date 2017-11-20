@@ -62,7 +62,7 @@ function doGlobal(target){
 	var elem;
 	// Site-wide stuff.
 	// Checkable menu items; e.g. in watch and labels pop-ups.
-	if (target.classList.contains("select-menu-item")) {
+	if (target.classList && target.classList.contains("select-menu-item")) {
 		target.setAttribute("role", "menuitemcheckbox");
 		onSelectMenuItemChanged(target);
 	} else {
@@ -105,6 +105,7 @@ function doGlobal(target){
 		elem.removeAttribute("aria-label");
 	}
 	// Dropdowns; e.g. for "Add your reaction".
+	
 	if (target.classList && target.classList.contains("dropdown"))
 		onDropdownChanged(target);
 	else {
@@ -236,6 +237,5 @@ var observer = new MutationObserver(function(mutations) {
 });
 observer.observe(document, {childList: true, attributes: true,
 	subtree: true, attributeFilter: ["class"]});
-
 onNodeAdded(document);
 doGlobal(document);
