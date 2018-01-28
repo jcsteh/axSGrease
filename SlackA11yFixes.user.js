@@ -81,7 +81,7 @@ function onNodeAdded(target) {
 		makeHeading(elem, 2);
 	}
 	// Make level3 headings for day separators in message history, individual search results, individual threads in All Threads.
-	for (elem of target.querySelectorAll(".day_divider, .search_result_header, .thread_header")) {
+	for (elem of target.querySelectorAll(".c-message_list__day_divider__label__pill, .search_result_header, .thread_header")) {
 		makeHeading(elem, 3);
 	}
 	// Kill some extraneous white space.
