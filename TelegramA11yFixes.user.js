@@ -2,6 +2,7 @@
 // @name           Telegram Accessibility Fixes
 // @namespace      http://axSGrease.nvaccess.org/
 // @description    Improves the accessibility of Telegram.
+// @description:es    Mejora la accesibilidad de Telegram.
 // @author         Michael Curran <mick@nvaccess.org>
 // @copyright 2017 NV Access Limited
 // @license GNU General Public License version 2.0
