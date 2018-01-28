@@ -2,10 +2,10 @@
 // @name           Slack Accessibility Fixes
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Slack.
-// @author         James Teh <jamie@nvaccess.org>
-// @copyright 2017 NV Access Limited
+// @author         James Teh <jamie@jantrid.net>
+// @copyright 2017-2018 NV Access Limited, James Teh, Tuukka Ojala
 // @license GNU General Public License version 2.0
-// @version        2017.1
+// @version        2018.1
 // @grant GM_log
 // @include https://*.slack.com/*
 // ==/UserScript==
