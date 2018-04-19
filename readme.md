@@ -37,7 +37,7 @@ It does the following:
  - Commit group headers in commit listings
  - The commit title for single commits
  - The header for each changed file in pull requests and commits
- - Each notification, and repo in the notifications list.
+ - Each notification and repo in the notifications list.
 - Ensures that various data tables aren't treated as layout tables, including:
  - The file content when viewing a single file
  - File listings
