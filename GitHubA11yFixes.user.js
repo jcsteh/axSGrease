@@ -3,7 +3,7 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jamie@nvaccess.org>
-// @copyright 2015-2016 NV Access Limited
+// @copyright 2015-2018 NV Access Limited
 // @license GNU General Public License version 2.0
 // @version        2016.1
 // @grant GM_log
