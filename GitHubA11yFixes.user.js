@@ -3,7 +3,7 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jamie@nvaccess.org>
-// @copyright 2015-2016 NV Access Limited
+// @copyright 2015-2018 NV Access Limited
 // @license GNU General Public License version 2.0
 // @version        2016.1
 // @grant GM_log
@@ -13,6 +13,24 @@
 function makeHeading(elem, level) {
 	elem.setAttribute("role", "heading");
 	elem.setAttribute("aria-level", level);
+}
+
+var idCounter = 0;
+// Get a node's id. If it doesn't have one, make and set one first.
+function getAriaId(elem) {
+	if (elem.id) {
+		return elem.id;
+	}
+	elem.setAttribute("id", "axsg-" + idCounter++);
+	return elem.id;
+}
+
+function makeElementOwn(parentElement, listOfNodes){
+	let ids = [];
+for(let node of listOfNodes){
+		ids.push(getAriaId(node));
+	}
+	parentElement.setAttribute("aria-owns", ids.join(" "));
 }
 
 function onSelectMenuItemChanged(target) {
@@ -39,12 +57,26 @@ function onDropdownChanged(target) {
 	}
 }
 
-// Used when we need to generate ids for ARIA.
-var idCounter = 0;
 
 function onNodeAdded(target) {
 	var elem;
-	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?/);
+	if(document.location.pathname.match(/\/(?:[^\/]+\/[^\/]+\/)?notifications\/?/)){
+		// Notifications page.
+		//First, make sure the h3 with the repo becomes an h2, so we can set the notifications for that repos as an h3.
+		for(elem of target.querySelectorAll(".notifications-repo-link"))
+			makeHeading(elem.parentNode, 2);
+		//Now, set the link marking each notification as an h3.
+		for(elem of target.querySelectorAll(".list-group-item-link")){
+			// Make the parent span a heading, but aria-owns the image to the end of this heading for niceity.
+			makeElementOwn(elem.parentNode, [elem, elem.previousElementSibling]);
+			makeHeading(elem.parentNode, 3);
+		}
+		return;
+	}
+	var res = document.location.pathname.match(/\/[^\/]+\/[^\/]+(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?/);
+	//In some cases (main page) res[1] is null. Thou shal not pass.
+	if(res[1] === null)
+		return;
 	// res[1] to res[4] are 4 path components of the URL after the project.
 	// res[1] will be "issues", "pull", "commit", etc.
 	// Empty path components will be undefined.
@@ -88,12 +120,9 @@ function onNodeAdded(target) {
 		for (elem of target.querySelectorAll(".add-line-comment")) {
 			// Put the comment button after the code instead of before.
 			// elem is the Add line comment button.
-			elem.setAttribute("id", "axsg-alc" + idCounter);
 			// nextElementSibling is the actual code.
-			elem.nextElementSibling.setAttribute("id", "axsg-l" + idCounter);
 			// Reorder children using aria-owns.
-			elem.parentNode.setAttribute("aria-owns", "axsg-l" + idCounter + " axsg-alc" + idCounter);
-			++idCounter;
+			makeElementOwn(elem.parentNode, [elem.nextElementSibling, elem]);
 		}
 		// Make sure diff tables never get treated as a layout table.
 		for (elem of target.querySelectorAll(".diff-table"))
@@ -102,10 +131,9 @@ function onNodeAdded(target) {
 		for (elem of target.querySelectorAll(".review-comment-contents > strong"))
 			makeHeading(elem, 3);
 	}
-
 	// Site-wide stuff.
 	// Checkable menu items; e.g. in watch and labels pop-ups.
-	if (target.classList.contains("select-menu-item")) {
+	if (target.classList && target.classList.contains("select-menu-item")) {
 		target.setAttribute("role", "menuitemcheckbox");
 		onSelectMenuItemChanged(target);
 	} else {
@@ -148,6 +176,7 @@ function onNodeAdded(target) {
 		elem.removeAttribute("aria-label");
 	}
 	// Dropdowns; e.g. for "Add your reaction".
+	
 	if (target.classList && target.classList.contains("dropdown"))
 		onDropdownChanged(target);
 	else {
@@ -164,6 +193,7 @@ function onNodeAdded(target) {
 		elem.setAttribute("aria-label", user + " " + elem.getAttribute("value"));
 	}
 }
+
 
 function onClassModified(target) {
 	var classes = target.classList;
@@ -199,5 +229,4 @@ var observer = new MutationObserver(function(mutations) {
 });
 observer.observe(document, {childList: true, attributes: true,
 	subtree: true, attributeFilter: ["class"]});
-
 onNodeAdded(document);

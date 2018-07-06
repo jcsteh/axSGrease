@@ -37,6 +37,7 @@ It does the following:
  - Commit group headers in commit listings
  - The commit title for single commits
  - The header for each changed file in pull requests and commits
+ - Each notification and repo in the notifications list.
 - Ensures that various data tables aren't treated as layout tables, including:
  - The file content when viewing a single file
  - File listings
@@ -45,6 +46,7 @@ It does the following:
 - When there are lines of code which can be commented on (e.g. a pull request or commit), puts the comment buttons after (rather than before) the code.
 - Makes the state of checkable menu items accessible; e.g. in the watch and labels pop-ups.
 - Marks "Add your reaction" buttons as having a pop-up, focuses the first reaction when the add button is pressed and makes the labels of the reaction buttons less verbose.
+- Places the notification type indicator graphic after the notification link for ease of reading.
 
 ### Kill Windowless Flash
 [Download Kill Windowless Flash](https://github.com/nvaccess/axSGrease/raw/master/KillWindowlessFlash.user.js)
