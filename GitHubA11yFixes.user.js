@@ -80,8 +80,6 @@ function onNodeAdded(target) {
 			elem.removeAttribute("aria-label");
 	} else if(res[1] == "edit") {
 		//Code mirror is on this page. The editor is inaccessible, and we need to be able to use it.
-		//Also, there is a text area for focus, we'll nuke it and replace the code with aria owns to make it seem like nothing happened.
-		//The line numbers get a class name which we can detect and aria-hide.
 		elem = target.querySelector(".CodeMirror-code");
 		if (elem){
 			//Code contenteditable should not have presentation.
