@@ -78,7 +78,30 @@ function onNodeAdded(target) {
 		// These have an aria-label which masks the name of the branch, so kill it.
 		for (elem of target.querySelectorAll("button.select-menu-button"))
 			elem.removeAttribute("aria-label");
-	}
+	} else if(res[1] == "edit") {
+		//Code mirror is on this page. The editor is inaccessible, and we need to be able to use it.
+		//Also, there is a text area for focus, we'll nuke it and replace the code with aria owns to make it seem like nothing happened.
+		//The line numbers get a class name which we can detect and aria-hide.
+		elem = target.querySelector(".CodeMirror-code");
+		if (elem){
+			//Code contenteditable should not have presentation.
+			elem.removeAttribute("role");
+		}
+		elem = target.querySelector("textarea.file-editor-textarea");
+		if(elem){
+			//Hide this textarea from screen readers. It's really only visual.
+			elem.setAttribute("aria-hidden", "true");
+		}
+		for (elem of target.querySelectorAll("div.CodeMirror-gutter-wrapper")){
+			//Gutters with line numbers and formatting,  can be safely hidden.
+			elem.setAttribute("aria-hidden", "true");
+		}
+		for(elem of target.querySelectorAll("pre.CodeMirror-line>span>span[cm-text]")){
+			//These are blank lines with a weird symbol denoting blank. Nuke them.
+			elem.setAttribute("aria-hidden", "true");
+		}
+    }
+    
 	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
 		// Pull request or commit.
 		// Header for each changed file.
