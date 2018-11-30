@@ -1,11 +1,11 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name           GitHub Accessibility Fixes
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jamie@nvaccess.org>
-// @copyright 2015-2016 NV Access Limited
+// @copyright 2015-2018 NV Access Limited
 // @license GNU General Public License version 2.0
-// @version        2016.1
+// @version        2018.1
 // @grant GM_log
 // @include https://github.com/*
 // ==/UserScript==
@@ -115,7 +115,7 @@ function onNodeAdded(target) {
 		}
 	}
 	// Table lists; e.g. in issue and commit listings.
-	for (elem of target.querySelectorAll(".table-list,.Box-body,ul.js-navigation-container"))
+	for (elem of target.querySelectorAll(".table-list,.Box-body,div.js-navigation-container"))
 		elem.setAttribute("role", "table");
 	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row,.Box-row"))
 		elem.setAttribute("role", "row");
