@@ -1,203 +1,160 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name           GitHub Accessibility Fixes
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
-// @author         James Teh <jamie@nvaccess.org>
-// @copyright 2015-2016 NV Access Limited
-// @license GNU General Public License version 2.0
-// @version        2016.1
-// @grant GM_log
+// @author         James Teh <jteh@mozilla.com>
+// @copyright 2019 Mozilla Corporation, Derek Riemer
+// @license Mozilla Public License version 2.0
+// @version        2019.1
 // @include https://github.com/*
 // ==/UserScript==
 
-function makeHeading(elem, level) {
-	elem.setAttribute("role", "heading");
-	elem.setAttribute("aria-level", level);
+/*** Functions for common tweaks. ***/
+
+function makeHeading(el, level) {
+	el.setAttribute("role", "heading");
+	el.setAttribute("aria-level", level);
 }
 
-function onSelectMenuItemChanged(target) {
-	target.setAttribute("aria-checked", target.classList.contains("selected") ? "true" : "false");
+function makeRegion(el, label) {
+	el.setAttribute("role", "region");
+	el.setAttribute("aria-label", label);
 }
 
-function onDropdownChanged(target) {
-	target.firstElementChild.setAttribute("aria-haspopup", "true");
-	var expanded = target.classList.contains("active");
-	target.firstElementChild.setAttribute("aria-expanded",  expanded ? "true" : "false");
-	var items = target.children[1];
-	if (!items) {
-		return;
-	}
-	if (expanded) {
-		items.removeAttribute("aria-hidden");
-		// Focus the first item.
-		var elem = items.querySelector("a,button");
-		if (elem)
-			elem.focus();
-	} else {
-		// Make sure the items are hidden.
-		items.setAttribute("aria-hidden", "true");
-	}
+function makeButton(el, label) {
+	el.setAttribute("role", "button");
+	el.setAttribute("aria-label", label);
 }
 
-// Used when we need to generate ids for ARIA.
+function makePresentational(el) {
+	el.setAttribute("role", "presentation");
+}
+
+function setLabel(el, label) {
+	el.setAttribute("aria-label", label);
+}
+
+function makeHidden(el) {
+	el.setAttribute("aria-hidden", "true");
+}
+
+function setExpanded(el, expanded) {
+	el.setAttribute("aria-expanded", expanded ? "true" : "false");
+}
+
 var idCounter = 0;
+// Get a node's id. If it doesn't have one, make and set one first.
+function setAriaIdIfNecessary(elem) {
+	if (!elem.id) {
+		elem.setAttribute("id", "axsg-" + idCounter++);
+	}
+	return elem.id;
+}
 
-function onNodeAdded(target) {
-	var elem;
-	var res = document.location.href.match(/github.com\/[^\/]+\/[^\/]+(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?(?:\/([^\/?]+))?/);
-	// res[1] to res[4] are 4 path components of the URL after the project.
-	// res[1] will be "issues", "pull", "commit", etc.
-	// Empty path components will be undefined.
-	if (["issues", "pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
-		// Issue, pull request or commit.
-		// Comment headers.
-		for (elem of target.querySelectorAll(".timeline-comment-header-text, .discussion-item-header"))
-			makeHeading(elem, 3);
+function makeElementOwn(parentElement, listOfNodes){
+	ids = [];
+	for(let node of listOfNodes){
+		ids.push(setAriaIdIfNecessary(node));
 	}
-	if (res[1] == "commits" || (res[1] == "pull" && res[3] == "commits" && !res[4])) {
-		// Commit listing.
-		// Commit group headers.
-		for (elem of target.querySelectorAll(".commit-group-title"))
-			makeHeading(elem, 2);
-	} else if ((res[1] == "commit" && res[2]) || (res[1] == "pull" && res[3] == "commits" && res[4])) {
-		// Single commit.
-		if (elem = target.querySelector(".commit-title"))
-			makeHeading(elem, 2);
-	} else if (res[1] == "blob") {
-		// Viewing a single file.
-		// Ensure the table never gets treated as a layout table.
-		if (elem = target.querySelector(".js-file-line-container"))
-			elem.setAttribute("role", "table");
-	} else if (res[1] == "tree" || !res[1]) {
-		// A file list is on this page.
-		// Ensure the table never gets treated as a layout table.
-		if (elem = target.querySelector(".files"))
-			elem.setAttribute("role", "table");
-	} else if (res[1] == "compare") {
-		// Branch selector buttons.
-		// These have an aria-label which masks the name of the branch, so kill it.
-		for (elem of target.querySelectorAll("button.select-menu-button"))
-			elem.removeAttribute("aria-label");
-	}
-	if (["pull", "commit"].indexOf(res[1]) >= 0 && res[2]) {
-		// Pull request or commit.
-		// Header for each changed file.
-		for (elem of target.querySelectorAll(".file-info"))
-			makeHeading(elem, 2);
-		// Lines of code which can be commented on.
-		for (elem of target.querySelectorAll(".add-line-comment")) {
-			// Put the comment button after the code instead of before.
-			// elem is the Add line comment button.
-			elem.setAttribute("id", "axsg-alc" + idCounter);
-			// nextElementSibling is the actual code.
-			elem.nextElementSibling.setAttribute("id", "axsg-l" + idCounter);
-			// Reorder children using aria-owns.
-			elem.parentNode.setAttribute("aria-owns", "axsg-l" + idCounter + " axsg-alc" + idCounter);
-			++idCounter;
-		}
-		// Make sure diff tables never get treated as a layout table.
-		for (elem of target.querySelectorAll(".diff-table"))
-			elem.setAttribute("role", "table");
-		// Review comment headers.
-		for (elem of target.querySelectorAll(".review-comment-contents > strong"))
-			makeHeading(elem, 3);
-	}
+	parentElement.setAttribute("aria-owns", ids.join(" "));
+}
 
-	// Site-wide stuff.
-	// Checkable menu items; e.g. in watch and labels pop-ups.
-	if (target.classList.contains("select-menu-item")) {
-		target.setAttribute("role", "menuitemcheckbox");
-		onSelectMenuItemChanged(target);
+/*** Code to apply the tweaks when appropriate. ***/
+
+function applyTweak(el, tweak) {
+	if (Array.isArray(tweak.tweak)) {
+		let [func, ...args] = tweak.tweak;
+		func(el, ...args);
 	} else {
-		for (elem of target.querySelectorAll(".select-menu-item")) {
-			elem.setAttribute("role", "menuitemcheckbox");
-			onSelectMenuItemChanged(elem);
+		tweak.tweak(el);
+	}
+}
+
+function applyTweaks(root, tweaks, checkRoot) {
+	for (let tweak of tweaks) {
+		for (let el of root.querySelectorAll(tweak.selector)) {
+			applyTweak(el, tweak);
+		}
+		if (checkRoot && root.matches(tweak.selector)) {
+			applyTweak(root, tweak);
 		}
 	}
-	// Table lists; e.g. in issue and commit listings.
-	for (elem of target.querySelectorAll(".table-list,.Box-body,ul.js-navigation-container"))
-		elem.setAttribute("role", "table");
-	for (elem of target.querySelectorAll(".table-list-item,.Box-body-row,.Box-row"))
-		elem.setAttribute("role", "row");
-	for (elem of target.querySelectorAll(".Box-body-row,.Box-row .d-table")) {
-		// There's one of these inside every .Box-body-row/Box-row.
-		// It's purely presentational.
-		elem.setAttribute("role", "presentation");
-		// Its children are the cells, but they have no common class.
-		for (elem of elem.children)
-			elem.setAttribute("role", "cell");
-	}
-	for (elem of target.querySelectorAll(".table-list-cell"))
-		elem.setAttribute("role", "cell");
-	// Tables in Markdown content get display: block, which causes them not to be treated as tables.
-	for (elem of target.querySelectorAll(".markdown-body table"))
-		elem.setAttribute("role", "table");
-	for (elem of target.querySelectorAll(".markdown-body tr"))
-		elem.setAttribute("role", "row");
-	for (elem of target.querySelectorAll(".markdown-body th"))
-		elem.setAttribute("role", "cell");
-	for (elem of target.querySelectorAll(".markdown-body td"))
-		elem.setAttribute("role", "cell");
-	// Tooltipped links (e.g. authors and labels in issue listings) shouldn't get the tooltip as their label.
-	for (elem of target.querySelectorAll("a.tooltipped")) {
-		if (!elem.textContent || /^\s+$/.test(elem.textContent))
-			continue;
-		var tooltip = elem.getAttribute("aria-label");
-		// This will unfortunately change the visual presentation.
-		elem.setAttribute("title", tooltip);
-		elem.removeAttribute("aria-label");
-	}
-	// Dropdowns; e.g. for "Add your reaction".
-	if (target.classList && target.classList.contains("dropdown"))
-		onDropdownChanged(target);
-	else {
-		for (elem of target.querySelectorAll(".dropdown"))
-			onDropdownChanged(elem);
-	}
-	// Reactions.
-	for (elem of target.querySelectorAll(".add-reactions-options-item"))
-		elem.setAttribute("aria-label", elem.getAttribute("data-reaction-label"));
-	for (elem of target.querySelectorAll(".user-has-reacted")) {
-		var user = elem.getAttribute("aria-label");
-		// This will unfortunately change the visual presentation.
-		elem.setAttribute("title", user);
-		elem.setAttribute("aria-label", user + " " + elem.getAttribute("value"));
-	}
 }
 
-function onClassModified(target) {
-	var classes = target.classList;
-	if (!classes)
-		return;
-	if (classes.contains("select-menu-item")) {
-		// Checkable menu items; e.g. in watch and labels pop-ups.
-		onSelectMenuItemChanged(target);
-	} else if (classes.contains("dropdown")) {
-		// Container for a dropdown.
-		onDropdownChanged(target);
-	}
-}
-
-var observer = new MutationObserver(function(mutations) {
-	for (var mutation of mutations) {
+let observer = new MutationObserver(function(mutations) {
+	for (let mutation of mutations) {
 		try {
 			if (mutation.type === "childList") {
-				for (var node of mutation.addedNodes) {
-					if (node.nodeType != Node.ELEMENT_NODE)
+				for (let node of mutation.addedNodes) {
+					if (node.nodeType != Node.ELEMENT_NODE) {
 						continue;
-					onNodeAdded(node);
+					}
+					applyTweaks(node, DYNAMIC_TWEAKS, true);
 				}
 			} else if (mutation.type === "attributes") {
-				if (mutation.attributeName == "class")
-					onClassModified(mutation.target);
+				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
-			GM_log("Exception while handling mutation: " + e);
+			console.log("Exception while handling mutation: " + e);
 		}
 	}
 });
-observer.observe(document, {childList: true, attributes: true,
-	subtree: true, attributeFilter: ["class"]});
 
-onNodeAdded(document);
+function init() {
+	applyTweaks(document, LOAD_TWEAKS, false);
+	applyTweaks(document, DYNAMIC_TWEAKS, false);
+	options = {childList: true, subtree: true};
+	if (DYNAMIC_TWEAK_ATTRIBS.length > 0) {
+		options.attributes = true;
+		options.attributeFilter = DYNAMIC_TWEAK_ATTRIBS;
+	}
+	observer.observe(document, options);
+}
+
+/*** Define the actual tweaks. ***/
+
+// Tweaks that only need to be applied on load.
+const LOAD_TWEAKS = [
+];
+
+// Attributes that should be watched for changes and cause dynamic tweaks to be
+// applied. For example, if there is a dynamic tweak which handles the state of
+// a check box and that state is determined using an attribute, that attribute
+// should be included here.
+const DYNAMIC_TWEAK_ATTRIBS = [];
+
+// Tweaks that must be applied whenever a node is added/changed.
+const DYNAMIC_TWEAKS = [
+	// Lines of code which can be commented on.
+	{selector: '.add-line-comment',
+		tweak: el => {
+			// Put the comment button after the code instead of before.
+			// el is the Add line comment button.
+			// nextElementSibling is the actual code.
+			makeElementOwn(el.parentNode, [el.nextElementSibling, el]);
+		}},
+	// Make non-comment events into headings; e.g. closing/referencing an issue,
+	// approving/requesting changes to a PR, merging a PR. Exclude commits and
+	// commit references because these contain too much detail and there's no
+	// way to separate the header from the body.
+	{selector: '.TimelineItem:not(.js-commit) .TimelineItem-body:not(.my-0):not([id^="ref-commit-"])',
+		tweak: [makeHeading, 3]},
+	// Table lists; e.g. in issue and commit listings.
+	{selector: '.js-navigation-container',
+		tweak: el => el.setAttribute("role", "table")},
+	{selector: '.Box-row',
+		tweak: el => el.setAttribute("role", "row")},
+	{selector: '.Box-row .d-table',
+		tweak: el => {
+			// There's one of these inside every row. It's purely presentational.
+			makePresentational(el);
+			// Its children are the cells, but they have no common class.
+			for (let cell of el.children) {
+				cell.setAttribute("role", "cell");
+			}
+		}},
+];
+
+/*** Lights, camera, action! ***/
+init();
