@@ -127,12 +127,15 @@ const DYNAMIC_TWEAK_ATTRIBS = [];
 // Tweaks that must be applied whenever a node is added/changed.
 const DYNAMIC_TWEAKS = [
 	// Lines of code which can be commented on.
-	{selector: '.add-line-comment',
+	{selector: '.add-line-comment, span.blob-code-inner',
 		tweak: el => {
 			// Put the comment button after the code instead of before.
-			// el is the Add line comment button.
-			// nextElementSibling is the actual code.
-			makeElementOwn(el.parentNode, [el.nextElementSibling, el]);
+			let cell = el.parentNode;
+			let code = cell.querySelector('.blob-code-inner');
+			let comment = cell.querySelector('.add-line-comment');
+			if (code && comment) {
+				makeElementOwn(cell, [code, comment]);
+			}
 		}},
 	// Make non-comment events into headings; e.g. closing/referencing an issue,
 	// approving/requesting changes to a PR, merging a PR. Exclude commits and
