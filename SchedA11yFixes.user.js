@@ -3,10 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Sched.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2018 Mozilla Corporation
+// @copyright 2019 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2018.1
-// @grant GM_log
+// @version        2019.1
 // @include https://*.sched.com/*
 // ==/UserScript==
 
@@ -24,7 +23,9 @@ function makeRegion(el, label) {
 
 function makeButton(el, label) {
 	el.setAttribute("role", "button");
-	el.setAttribute("aria-label", label);
+	if (label) {
+		el.setAttribute("aria-label", label);
+	}
 }
 
 function makePresentational(el) {
@@ -43,6 +44,34 @@ function setExpanded(el, expanded) {
 	el.setAttribute("aria-expanded", expanded ? "true" : "false");
 }
 
+var idCounter = 0;
+// Get a node's id. If it doesn't have one, make and set one first.
+function setAriaIdIfNecessary(elem) {
+	if (!elem.id) {
+		elem.setAttribute("id", "axsg-" + idCounter++);
+	}
+	return elem.id;
+}
+
+function makeElementOwn(parentElement, listOfNodes){
+	ids = [];
+	for(let node of listOfNodes){
+		ids.push(setAriaIdIfNecessary(node));
+	}
+	parentElement.setAttribute("aria-owns", ids.join(" "));
+}
+
+// Focus something even if it wasn't made focusable by the author.
+function forceFocus(el) {
+	let focusable = el.hasAttribute("tabindex");
+	if (focusable) {
+		el.focus();
+		return;
+	}
+	el.setAttribute("tabindex", "-1");
+	el.focus();
+}
+
 /*** Code to apply the tweaks when appropriate. ***/
 
 function applyTweak(el, tweak) {
@@ -57,17 +86,20 @@ function applyTweak(el, tweak) {
 function applyTweaks(root, tweaks, checkRoot) {
 	for (let tweak of tweaks) {
 		for (let el of root.querySelectorAll(tweak.selector)) {
-			applyTweak(el, tweak);
+			try {
+				applyTweak(el, tweak);
+			} catch (e) {
+				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+			}
 		}
 		if (checkRoot && root.matches(tweak.selector)) {
-			applyTweak(root, tweak);
+			try {
+				applyTweak(root, tweak);
+			} catch (e) {
+				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+			}
 		}
 	}
-}
-
-function init() {
-	applyTweaks(document, LOAD_TWEAKS, false);
-	applyTweaks(document, DYNAMIC_TWEAKS, false);
 }
 
 let observer = new MutationObserver(function(mutations) {
@@ -81,18 +113,25 @@ let observer = new MutationObserver(function(mutations) {
 					applyTweaks(node, DYNAMIC_TWEAKS, true);
 				}
 			} else if (mutation.type === "attributes") {
-				if (mutation.attributeName == "class") {
-					applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
-				}
+				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
-			GM_log("Exception while handling mutation: " + e);
+			console.log("Exception while handling mutation: " + e);
 		}
 	}
 });
-observer.observe(document, {childList: true, attributes: true,
-	subtree: true, attributeFilter: ["class"]});
+
+function init() {
+	applyTweaks(document, LOAD_TWEAKS, false);
+	applyTweaks(document, DYNAMIC_TWEAKS, false);
+	options = {childList: true, subtree: true};
+	if (DYNAMIC_TWEAK_ATTRIBS.length > 0) {
+		options.attributes = true;
+		options.attributeFilter = DYNAMIC_TWEAK_ATTRIBS;
+	}
+	observer.observe(document, options);
+}
 
 /*** Define the actual tweaks. ***/
 
@@ -119,6 +158,10 @@ const LOAD_TWEAKS = [
 			}
 		}},
 ]
+
+// Attributes that should be watched for changes and cause dynamic tweaks to be
+// applied.
+const DYNAMIC_TWEAK_ATTRIBS = ["class"];
 
 // Tweaks that must be applied whenever a node is added/changed.
 const DYNAMIC_TWEAKS = [
