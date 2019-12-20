@@ -6,7 +6,6 @@
 // @copyright 2019 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
 // @version        2019.1
-// @grant GM_log
 // @include https://www.expensify.com/*
 // ==/UserScript==
 
@@ -90,14 +89,14 @@ function applyTweaks(root, tweaks, checkRoot) {
 			try {
 				applyTweak(el, tweak);
 			} catch (e) {
-				GM_log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
 			}
 		}
 		if (checkRoot && root.matches(tweak.selector)) {
 			try {
 				applyTweak(root, tweak);
 			} catch (e) {
-				GM_log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
 			}
 		}
 	}
@@ -118,7 +117,7 @@ let observer = new MutationObserver(function(mutations) {
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
-			GM_log("Exception while handling mutation: " + e);
+			console.log("Exception while handling mutation: " + e);
 		}
 	}
 });
