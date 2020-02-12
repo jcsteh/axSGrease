@@ -148,7 +148,7 @@ const DYNAMIC_TWEAKS = [
 		tweak: el => el.setAttribute("role", "table")},
 	{selector: '.Box-row',
 		tweak: el => el.setAttribute("role", "row")},
-	{selector: '.Box-row .d-table',
+	{selector: '.Box-row .d-flex',
 		tweak: el => {
 			// There's one of these inside every row. It's purely presentational.
 			makePresentational(el);
