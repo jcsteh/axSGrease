@@ -143,8 +143,8 @@ const DYNAMIC_TWEAKS = [
 	// way to separate the header from the body.
 	{selector: '.TimelineItem:not(.js-commit) .TimelineItem-body:not(.my-0):not([id^="ref-commit-"])',
 		tweak: [makeHeading, 3]},
-	// Table lists; e.g. in issue and commit listings.
-	{selector: '.js-navigation-container',
+	// Issue listing tables.
+	{selector: '.js-navigation-container:not(.commits-listing)',
 		tweak: el => el.setAttribute("role", "table")},
 	{selector: '.Box-row',
 		tweak: el => el.setAttribute("role", "row")},
@@ -157,6 +157,9 @@ const DYNAMIC_TWEAKS = [
 				cell.setAttribute("role", "cell");
 			}
 		}},
+		// Commit group headers in commit listings.
+		{selector: '.commit-group-title',
+			tweak: [makeHeading, 2]},
 ];
 
 /*** Lights, camera, action! ***/
