@@ -7,7 +7,7 @@
 // @license Mozilla Public License version 2.0
 // @version        2019.1
 // @grant GM_log
-// @include https://beta.music.apple.com/*
+// @include https://music.apple.com/*
 // ==/UserScript==
 
 /*** Functions for common tweaks. ***/
