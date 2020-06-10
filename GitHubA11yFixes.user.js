@@ -146,7 +146,7 @@ const DYNAMIC_TWEAKS = [
 	// Issue listing tables.
 	{selector: '.js-navigation-container:not(.commits-listing)',
 		tweak: el => el.setAttribute("role", "table")},
-	{selector: '.Box-row',
+	{selector: '.Box-row:not(.js-commits-list-item)',
 		tweak: el => el.setAttribute("role", "row")},
 	{selector: '.Box-row .d-flex',
 		tweak: el => {
