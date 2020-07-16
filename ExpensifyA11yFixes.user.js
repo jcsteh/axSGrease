@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Expensify.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2019 Mozilla Corporation, Derek Riemer
+// @copyright 2019-2020 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2019.1
+// @version        2020.1
 // @include https://www.expensify.com/*
 // ==/UserScript==
 
@@ -208,6 +208,9 @@ const DYNAMIC_TWEAKS = [
 				}
 			}
 		}},
+	// Delete button when editing an expense.
+	{selector:  '#megaEdit_deleteButton',
+		tweak: [setLabel, "Delete"]},
 ];
 
 /*** Lights, camera, action! ***/
