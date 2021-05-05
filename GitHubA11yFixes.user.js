@@ -141,7 +141,7 @@ const DYNAMIC_TWEAKS = [
 	// approving/requesting changes to a PR, merging a PR. Exclude commits and
 	// commit references because these contain too much detail and there's no
 	// way to separate the header from the body.
-	{selector: '.TimelineItem:not(.js-commit) .TimelineItem-body:not(.my-0):not([id^="ref-commit-"])',
+	{selector: '.TimelineItem:not(.js-commit) .TimelineItem-body:not(.my-0):not(.discussion-comment):not([id^="ref-commit-"])',
 		tweak: [makeHeading, 3]},
 	// Issue listing tables.
 	{selector: '.js-navigation-container:not(.commits-listing)',
