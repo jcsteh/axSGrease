@@ -146,7 +146,7 @@ const LOAD_TWEAKS = [
 
 // Attributes that should be watched for changes and cause dynamic tweaks to be
 // applied.
-const DYNAMIC_TWEAK_ATTRIBS = ["style"];
+const DYNAMIC_TWEAK_ATTRIBS = ["style", "class"];
 
 // Tweaks that must be applied whenever an element is added/changed.
 const DYNAMIC_TWEAKS = [
@@ -158,6 +158,10 @@ const DYNAMIC_TWEAKS = [
 			const content = el.querySelector('[contenteditable]');
 			if (content) {
 				el.setAttribute("aria-labelledby", setAriaIdIfNecessary(content));
+			}
+			el.removeAttribute("aria-description");
+			if (el.classList.contains("IZ65Hb-bJ69tf")) {
+				el.setAttribute("aria-description", "pinned");
 			}
 		}},
 	// Check boxes in lists.
