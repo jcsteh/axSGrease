@@ -139,9 +139,22 @@ function init() {
 const LOAD_TWEAKS = [
 	// Set role="application" because the most efficient way to
 	// navigate Google Keep is with keyboard shortcuts and browse mode makes that
-	// harder.
+	// harder. Also handle certain key presses.
 	{selector: 'body',
-		tweak: el => el.setAttribute("role", "application")},
+		tweak: el => {
+			el.setAttribute("role", "application");
+			el.addEventListener("keydown", evt => {
+				// Make alt+enter open a link if a link bubble is shown.
+				if (evt.key == "Enter" && evt.altKey) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					const openLink = document.querySelector(".IZ65Hb-hSRGPd-V68bde-hSRGPd");
+					if (openLink && openLink.clientWidth > 0) {
+						openLink.click();
+					}
+				}
+			}, { capture: true });
+		}},
 ];
 
 // Attributes that should be watched for changes and cause dynamic tweaks to be
