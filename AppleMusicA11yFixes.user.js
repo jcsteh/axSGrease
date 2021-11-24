@@ -160,6 +160,9 @@ const DYNAMIC_TWEAKS = [
 	// The Add to library button for songs in song lists.
 	{selector: '.add-to-library',
 		tweak: [setLabel, "Add to library"]},
+	// The title of an active radio station.
+	{selector: '.typography-large-title-emphasized',
+		tweak: [makeHeading, 1]},
 ];
 
 /*** Lights, camera, action! ***/
