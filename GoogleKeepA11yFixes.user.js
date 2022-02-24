@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Google Keep.
 // @author         James Teh <jamie@jantrid.net>
-// @copyright 2021 James Teh, Mozilla Corporation, Derek Riemer
+// @copyright 2022 James Teh, Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2021.1
+// @version        2022.1
 // @include https://keep.google.com/*
 // ==/UserScript==
 
@@ -83,13 +83,15 @@ function applyTweak(el, tweak) {
 	}
 }
 
-function applyTweaks(root, tweaks, checkRoot) {
+function applyTweaks(root, tweaks, checkRoot, forAttrChange=false) {
 	for (let tweak of tweaks) {
-		for (let el of root.querySelectorAll(tweak.selector)) {
-			try {
-				applyTweak(el, tweak);
-			} catch (e) {
-				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+		if (!forAttrChange || tweak.whenAttrChangedOnAncestor !== false) {
+			for (let el of root.querySelectorAll(tweak.selector)) {
+				try {
+					applyTweak(el, tweak);
+				} catch (e) {
+					console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+				}
 			}
 		}
 		if (checkRoot && root.matches(tweak.selector)) {
@@ -113,7 +115,7 @@ let observer = new MutationObserver(function(mutations) {
 					applyTweaks(node, DYNAMIC_TWEAKS, true);
 				}
 			} else if (mutation.type === "attributes") {
-				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
+				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true, true);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
@@ -189,11 +191,13 @@ const DYNAMIC_TWEAKS = [
 				el.setAttribute("aria-labelledby", setAriaIdIfNecessary(content));
 			}
 		}},
-	// When the notes list reappears after dismissing search, move focus away from
-	// the search box so keyboard shortcuts work without having to tab.
-	{selector: '.h1U9Be-xhiy4',
+	// When the Clear search button disappears after dismissing search, move focus
+	// away from the search box so keyboard shortcuts work without having to
+	// tab.
+	{selector: '.gb_nf',
+		whenAttrChangedOnAncestor: false,
 		tweak: el => {
-			if (el.style.display != "none") {
+			if (el.style.visibility == "hidden") {
 				document.activeElement.blur();
 			}
 		}},
