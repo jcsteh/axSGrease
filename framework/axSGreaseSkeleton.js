@@ -3,7 +3,7 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of some site.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2019 Mozilla Corporation, Derek Riemer
+// @copyright 2019-2022 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
 // @version        2019.1
 // @include https://some.site/*
@@ -83,13 +83,15 @@ function applyTweak(el, tweak) {
 	}
 }
 
-function applyTweaks(root, tweaks, checkRoot) {
+function applyTweaks(root, tweaks, checkRoot, forAttrChange=false) {
 	for (let tweak of tweaks) {
-		for (let el of root.querySelectorAll(tweak.selector)) {
-			try {
-				applyTweak(el, tweak);
-			} catch (e) {
-				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+		if (!forAttrChange || tweak.whenAttrChangedOnAncestor !== false) {
+			for (let el of root.querySelectorAll(tweak.selector)) {
+				try {
+					applyTweak(el, tweak);
+				} catch (e) {
+					console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
+				}
 			}
 		}
 		if (checkRoot && root.matches(tweak.selector)) {
@@ -113,7 +115,7 @@ let observer = new MutationObserver(function(mutations) {
 					applyTweaks(node, DYNAMIC_TWEAKS, true);
 				}
 			} else if (mutation.type === "attributes") {
-				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
+				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true, true);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.

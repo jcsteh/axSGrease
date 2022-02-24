@@ -26,6 +26,10 @@ if `DYNAMIC_TWEAK_ATTRIBS` is empty, no attributes will be observed.
 In the `LOAD_TWEAKS` and `DYNAMIC_TWEAKS` arrays, each tweak is an object with these keys:
 
 - `selector`: A CSS selector for the element(s) you want to tweak.
+- whenAttrChangedOnAncestor: Whether to apply this tweak when an attribute change occurs on an ancestor.
+    By default, the tweak will apply for attribute changes on both the node itself, as well as for an attribute change on any ancestor.
+    This can be problematic if, for example, you're using the style attribute to make a decision about focus, but the style changes on an ancestor.
+    In that case, you can set this to false.
 - `tweak`: Either:
     1. A function which is passed a single element to tweak.
         For example:
