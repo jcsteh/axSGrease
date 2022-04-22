@@ -1,7 +1,7 @@
 # AxSGrease
 
-- Author: James Teh &lt;jamie@nvaccess.org&gt; & other contributors
-- Copyright: 2011-2017 NV Access Limited
+- Author: James Teh &lt;jamie@jantrid.net&gt; & other contributors
+- Copyright: 2011-2022 NV Access Limited, James Teh
 
 AxSGrease is a set of user scripts (also known as GreaseMonkey scripts) to improve the accessibility of various websites.
 
