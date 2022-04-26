@@ -194,7 +194,7 @@ const DYNAMIC_TWEAKS = [
 	// When the Clear search button disappears after dismissing search, move focus
 	// away from the search box so keyboard shortcuts work without having to
 	// tab.
-	{selector: '.gb_nf',
+	{selector: '.gb_qf',
 		whenAttrChangedOnAncestor: false,
 		tweak: el => {
 			if (el.style.visibility == "hidden") {
