@@ -49,14 +49,6 @@ It does the following:
 - Makes the state of checkable menu items accessible; e.g. in the watch and labels pop-ups.
 - Marks "Add your reaction" buttons as having a pop-up, focuses the first reaction when the add button is pressed and makes the labels of the reaction buttons less verbose.
 
-### Kill Windowless Flash
-[Download Kill Windowless Flash](https://github.com/jcsteh/axSGrease/raw/master/KillWindowlessFlash.user.js)
-
-Adobe Flash objects can be made to be accessible.
-Even if they aren't and only contain unlabelled controls, it might still be possible to use these objects with some initial sighted help or by trial and error.
-However, it's impossible for accessibility tools to interact at all with Flash objects that are "windowless" (also known as transparent or opaque).
-This script makes windowless Flash objects windowed so that there may be a chance of accessing them.
-
 ### Monorail Accessibility Fixes
 [Download Monorail Accessibility Fixes](https://github.com/jcsteh/axSGrease/raw/master/MonorailA11yFixes.user.js)
 
