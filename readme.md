@@ -58,22 +58,6 @@ It does the following:
 - Makes issue titles and comment headings accessible as headings.
 - Makes the star control and status accessible.
 
-### Slack Accessibility Fixes
-[Download Slack Accessibility Fixes](https://github.com/jcsteh/axSGrease/raw/master/SlackA11yFixes.user.js)
-
-This script improves the accessibility of [Slack](https://www.slack.com/).
-It does the following:
-
-- Reorders some elements which appear in the wrong place for accessibility. For example, using this script, the input area appears near the bottom of the page as it does visually instead of at the top.
-- Makes message timestamps appear on a single line instead of crossing several lines.
-- Makes options for each message (Start a thread, Share message, etc.) accessible.
- To access these, move the mouse to the text of a message.
- They then appear above the author's name as buttons.
-- Makes the current channel/direct message title, day separators in the message history, the headers of individual search results and the headers of individual threads in All Threads accessible as headings.
-- Reports incoming messages automatically (using a live region).
-- Hides an editable area which isn't shown visually.
-- Reports suggestions in various autocompletes such as the Quick Switcher and direct messages menu.
-
 ### Telegram accessibility fixes
 [Download Telegram Accessibility Fixes](https://github.com/jcsteh/axSGrease/raw/master/TelegramA11yFixes.user.js)
 
