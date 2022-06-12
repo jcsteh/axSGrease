@@ -145,6 +145,10 @@ const DYNAMIC_TWEAK_ATTRIBS = [];
 
 // Tweaks that must be applied whenever a node is added/changed.
 const DYNAMIC_TWEAKS = [
+	// Get rid of the svg inside the search combobox which prevents detection of
+	// the inner textbox with NVDA browse mode.
+	{selector: '.dt-search-box__icon',
+		tweak: makePresentational},
 	// Make "Library" and "Playlists" headings.
 	{selector: '.web-navigation__header-text',
 		tweak: [makeHeading, 2]},
