@@ -155,12 +155,14 @@ const DYNAMIC_TWEAKS = [
 	// structure.
 	{selector: '.sharedTable__details',
 		tweak: makePresentational},
-	{selector: '.sharedTable__head--text, .sharedTable__column, .sharedTable__details--actions',
+	{selector: '.sharedTable__head--text',
+		tweak: el => el.setAttribute("role", "columnheader")},
+	{selector: '.sharedTable__column, .sharedTable__details--actions',
 		tweak: el => el.setAttribute("role", "cell")},
 	// IconButton is a <button> wrapping an icon, but the <button> doesn't
 	// handle clicks. We make the icon itself a button below. role="presentation"
 	// doesn't work because it's focusable, so we hackily use role="group" instead.
-	{selector: '.IconButton',
+	{selector: '.IconButton, button.Tooltip__icon',
 		tweak: el => el.setAttribute("role", "group")},
 	{selector: '.icon-edit',
 		tweak: [makeButton, "Edit"]},
@@ -170,6 +172,18 @@ const DYNAMIC_TWEAKS = [
 		tweak: [makeButton, "Confirm"]},
 	{selector: '.icon-x',
 		tweak: [makeButton, "Cancel"]},
+	{selector: '.add .icon-plus-faq',
+		tweak: [makeButton, "Add"]},
+	{selector: '.Tooltip__icon .icon-alert-circle',
+		tweak: [makeButton, "Help"]},
+	// Indicate buttons which open popup menus; e.g. the button to choose the
+	// type of DNS record to add.
+	{selector: '.ccp__select--toggle',
+		tweak: el => el.setAttribute("aria-haspopup", "true")},
+	// Focus the first button in a popup menu when it appears; e.g. the menu to
+	// choose the type of DNS record to add.
+	{selector: '.ccp__select--menu',
+		tweak: el => el.querySelector("button").focus()},
 ];
 
 /*** Lights, camera, action! ***/
