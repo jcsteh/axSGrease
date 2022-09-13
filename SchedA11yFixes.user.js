@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Sched.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2019 Mozilla Corporation, Derek Riemer
+// @copyright 2019-2022 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2019.1
+// @version        2022.1
 // @include https://*.sched.com/*
 // ==/UserScript==
 
@@ -157,6 +157,8 @@ const LOAD_TWEAKS = [
 				el.setAttribute("aria-label", label);
 			}
 		}},
+	{selector: '.pinned',
+		tweak: el => el.setAttribute("aria-description", "pinned")},
 ]
 
 // Attributes that should be watched for changes and cause dynamic tweaks to be
