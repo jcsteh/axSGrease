@@ -11,6 +11,17 @@
 
 /*** Functions for common tweaks. ***/
 
+/**
+ * Adds text to the given live region, and clears it a second later so its no
+ * longer in the virtual buffer.
+ */
+function announce(text, region) {
+	region.innerText = text;
+	setTimeout(()=>{
+		region.innerText = '';
+	}, 1000);
+}
+
 function makeHeading(el, level) {
 	el.setAttribute("role", "heading");
 	el.setAttribute("aria-level", level);
