@@ -20,6 +20,17 @@ Some newer scripts are missing, some older scripts should be removed, etc.
 
 Following is information about each script.
 
+### Asus Router Accessibility fixes
+
+[Download Asus Router Accessibility Fixes](https://github.com/jcsteh/axSGrease/raw/master/AsusRouterA11yFixes.user.js)
+ This script improves the accessibility of the asus router firmware. (this has only been tested on RT-AX56U router). it does the following:
+
+- makes tutor help messages automatically read.
+- Creates a primary and secondary navigation region, and removes layout tables for navigation.
+- Adds section headers to the nav menu, at heading level 2.
+- Makes pages that have a title have an h1.
+- Labels some unlabeled images.
+
 ### Bugzilla Accessibility Fixes
 [Download Bugzilla Accessibility Fixes](https://github.com/jcsteh/axSGrease/raw/master/BugzillaA11yFixes.user.js)
 
