@@ -12,16 +12,58 @@
 /*** Functions for common tweaks. ***/
 
 /**
- * Adds text to the given live region, and clears it a second later so it's no
+ * Adds text to the given live region, and clears it a second later so its no
  * longer in the virtual buffer.
+ * @param {string} regionid an id of a region.
  */
-function announce(text, region) {
-	region.innerText = text;
-	setTimeout(()=>{
-		region.innerText = '';
-	}, 1000);
+function announce(text, regionId) {
+	getLiveRegion(regionId)
+		.then((region) => {
+			region.innerText = text;
+			setTimeout(() => {
+				region.innerText = '';
+			}, 1000);
+		});
 }
 
+/**
+ * create or fetch a live region that can be used with updateLiveRegion. Returns a promise with the region.
+ * @param {string} id the name of the new live region. This is an html id.
+ * @return {!Promise<HTMLElement>} a div that contains the live region. This can typically be ignored, this exxists to aid in chaining creation of non-existant regions.
+ */
+
+function getLiveRegion(id) {
+	const updatePromise = new Promise((resolve, reject) => {
+		if (!id) {
+			reject('Need a valid id!');
+			return;
+		}
+		const existingRegion = document.getElementById(id);
+		if (existingRegion) {
+			resolve(existingRegion);
+			return;
+		}
+		const region = document.createElement('div');
+		region.id = id;
+		region.setAttribute('aria-live', 'polite');
+		region.setAttribute('aria-atomic', 'true');
+		region.style.position = 'absolute';
+		region.style.width = '50px';
+		region.style.height = '50px';
+		region.style.opasity = 0;
+		document.body.appendChild(region);
+		// we need to delay a little to get the new region to actually read contents.
+		// A11y api probably don't considder the relevant changes,  additions, until
+		//an annimation frame has passed. It may, in reality be more like 2-4
+		// annimation frames, so delay 134 ms to be safe.
+		setTimeout(() => {
+			resolve(region);
+		}, 134);
+	});
+	return updatePromise;
+}
+
+/**
 function makeHeading(el, level) {
 	el.setAttribute("role", "heading");
 	el.setAttribute("aria-level", level);
@@ -64,9 +106,9 @@ function setAriaIdIfNecessary(elem) {
 	return elem.id;
 }
 
-function makeElementOwn(parentElement, listOfNodes){
+function makeElementOwn(parentElement, listOfNodes) {
 	ids = [];
-	for(let node of listOfNodes){
+	for (let node of listOfNodes) {
 		ids.push(setAriaIdIfNecessary(node));
 	}
 	parentElement.setAttribute("aria-owns", ids.join(" "));
@@ -94,7 +136,7 @@ function applyTweak(el, tweak) {
 	}
 }
 
-function applyTweaks(root, tweaks, checkRoot, forAttrChange=false) {
+function applyTweaks(root, tweaks, checkRoot, forAttrChange = false) {
 	for (let tweak of tweaks) {
 		if (!forAttrChange || tweak.whenAttrChangedOnAncestor !== false) {
 			for (let el of root.querySelectorAll(tweak.selector)) {
@@ -115,7 +157,7 @@ function applyTweaks(root, tweaks, checkRoot, forAttrChange=false) {
 	}
 }
 
-let observer = new MutationObserver(function(mutations) {
+let observer = new MutationObserver(function (mutations) {
 	for (let mutation of mutations) {
 		try {
 			if (mutation.type === "childList") {
@@ -135,10 +177,13 @@ let observer = new MutationObserver(function(mutations) {
 	}
 });
 
+/** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
+function userInit(){}
+
 function init() {
 	applyTweaks(document, LOAD_TWEAKS, false);
 	applyTweaks(document, DYNAMIC_TWEAKS, false);
-	options = {childList: true, subtree: true};
+	options = { childList: true, subtree: true };
 	if (DYNAMIC_TWEAK_ATTRIBS.length > 0) {
 		options.attributes = true;
 		options.attributeFilter = DYNAMIC_TWEAK_ATTRIBS;
@@ -162,3 +207,4 @@ const DYNAMIC_TWEAKS = [
 
 /*** Lights, camera, action! ***/
 init();
+userInit();
