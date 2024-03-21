@@ -53,7 +53,7 @@ function getLiveRegion(id) {
 		region.style.opasity = 0;
 		document.body.appendChild(region);
 		// we need to delay a little to get the new region to actually read contents.
-		// A11y api probably don't considder the relevant changes,  additions, until
+		// A11y APIs probably don't treat the relevant changes as "additions" until
 		//an annimation frame has passed. It may, in reality be more like 2-4
 		// annimation frames, so delay 134 ms to be safe.
 		setTimeout(() => {
