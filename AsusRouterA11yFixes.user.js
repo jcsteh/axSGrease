@@ -179,9 +179,6 @@ let observer = new MutationObserver(function (mutations) {
 	}
 });
 
-/** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
-function userInit() { }
-
 function init() {
 	applyTweaks(document, LOAD_TWEAKS, false);
 	applyTweaks(document, DYNAMIC_TWEAKS, false);
@@ -262,6 +259,9 @@ const DYNAMIC_TWEAKS = [
 		},
 	},
 ];
+
+/** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
+function userInit() { }
 
 /*** Lights, camera, action! ***/
 init();
