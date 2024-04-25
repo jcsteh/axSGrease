@@ -63,7 +63,6 @@ function getLiveRegion(id) {
 	return updatePromise;
 }
 
-/**
 function makeHeading(el, level) {
 	el.setAttribute("role", "heading");
 	el.setAttribute("aria-level", level);

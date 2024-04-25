@@ -192,7 +192,6 @@ function init() {
 
 /*** Define the actual tweaks. ***/
 
-globals = [];
 // Tweaks that only need to be applied on load.
 const LOAD_TWEAKS = [
 	{
