@@ -1,12 +1,14 @@
 // ==UserScript==
-// @name some site Accessibility Fixes
-// @namespace      http://axSgrease.nvaccess.org/
-// @description    Improves the accessibility of some site.
-// @author         James Teh <jteh@mozilla.com>
-// @copyright 2019-2022 Mozilla Corporation, Derek Riemer
+// @name asus router interface Accessibility Fixes
+// @grant  unsafeWindow
+// @namespace      http://axSgrease.derekriemer.org/
+// @description    Improves the accessibility of the asus router management interface
+// @author         James Teh <jteh@mozilla.com>, derek riemer <git@derekriemer.com>
+// @copyright 2019-2024 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2019.1
-// @include https://some.site/*
+// @version        2024.1
+// @include http://asusrouter.com/*
+// @include http://www.asusrouter.com/*
 // ==/UserScript==
 
 /*** Functions for common tweaks. ***/
@@ -52,7 +54,7 @@ function getLiveRegion(id) {
 		region.style.opasity = 0;
 		document.body.appendChild(region);
 		// we need to delay a little to get the new region to actually read contents.
-		// A11y APIs probably don't treat the relevant changes as "additions" until
+		// A11y APIs probably don't considder the relevant changes,  additions, until
 		//an annimation frame has passed. It may, in reality be more like 2-4
 		// annimation frames, so delay 134 ms to be safe.
 		setTimeout(() => {
@@ -77,6 +79,10 @@ function makeButton(el, label) {
 	if (label) {
 		el.setAttribute("aria-label", label);
 	}
+}
+
+function setRole(el, role) {
+	el.setAttribute('role', role);
 }
 
 function makePresentational(el) {
@@ -134,15 +140,13 @@ function applyTweak(el, tweak) {
 	}
 }
 
-function applyTweaks(root, tweaks, checkRoot, forAttrChange = false) {
+function applyTweaks(root, tweaks, checkRoot) {
 	for (let tweak of tweaks) {
-		if (!forAttrChange || tweak.whenAttrChangedOnAncestor !== false) {
-			for (let el of root.querySelectorAll(tweak.selector)) {
-				try {
-					applyTweak(el, tweak);
-				} catch (e) {
-					console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
-				}
+		for (let el of root.querySelectorAll(tweak.selector)) {
+			try {
+				applyTweak(el, tweak);
+			} catch (e) {
+				console.log("Exception while applying tweak for '" + tweak.selector + "': " + e);
 			}
 		}
 		if (checkRoot && root.matches(tweak.selector)) {
@@ -166,7 +170,7 @@ let observer = new MutationObserver(function (mutations) {
 					applyTweaks(node, DYNAMIC_TWEAKS, true);
 				}
 			} else if (mutation.type === "attributes") {
-				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true, true);
+				applyTweaks(mutation.target, DYNAMIC_TWEAKS, true);
 			}
 		} catch (e) {
 			// Catch exceptions for individual mutations so other mutations are still handled.
@@ -190,6 +194,20 @@ function init() {
 
 // Tweaks that only need to be applied on load.
 const LOAD_TWEAKS = [
+	{
+		selector: "#op_link",
+		tweak: el => {
+			const table = el.closest('table');
+			setRole(table, 'banner');
+			// Because I can, make the tbody a list, and each td a list item.
+			setRole(table.firstElementChild, 'list');
+			for (let pres of table.firstElementChild.children) {
+				makePresentational(pres);
+			}
+			// td's become listitems
+			Array.from(table.querySelectorAll('td')).forEach((e) => setRole(e, e.innerText ? 'listitem' : 'none'));
+		},
+	},
 ];
 
 // Attributes that should be watched for changes and cause dynamic tweaks to be
@@ -198,11 +216,51 @@ const DYNAMIC_TWEAK_ATTRIBS = [];
 
 // Tweaks that must be applied whenever an element is added/changed.
 const DYNAMIC_TWEAKS = [
+	{
+		selector: '.menu_Desc',
+		tweak: [setRole, 'link'],
+	},
+	{
+		selector: '.menu_Split',
+		tweak: [makeHeading, 2],
+	},
+	{
+		selector: '#mainMenu',
+		tweak: [makeRegion, 'main navigation'],
+	},
+	{
+		selector: '#tabMenu',
+		tweak: [makeRegion, 'secondary navigation'],
+	},
+	{
+		selector: '#tabMenu td',
+		tweak: [setRole, 'link'],
+	},
+	{
+		selector: '.formfonttitle',
+		tweak: [makeHeading, 1],
+	},
+	{
+		selector: 'img[src="/switcherplugin/iphone_switch_container_on.png"]',
+		tweak: e => {
+			e.alt = 'on';
+		},
+	},
+	{
+		selector: "#overDiv_table1",
+		tweak: e => {
+			// on rare occasions, this is delayed while the table renders, so
+			// we wait a quarter second.  Also kind of mimics a tutor help
+			// with most screen readers.
+			setTimeout(() => {
+				announce(e.innerText, 'tutor');
+			}, 250);
+		},
+	},
 ];
 
-/** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
-function userInit(){}
+/** Add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
+function userInit() { }
 
 /*** Lights, camera, action! ***/
 init();
-userInit();
