@@ -29,9 +29,9 @@ function announce(text, regionId) {
 }
 
 /**
- * create or fetch a live region that can be used with updateLiveRegion. Returns a promise with the region.
+ * create or fetch a live region that can be used with announce(). Returns a promise with the region.
  * @param {string} id the name of the new live region. This is an html id.
- * @return {!Promise<HTMLElement>} a div that contains the live region. This can typically be ignored, this exxists to aid in chaining creation of non-existant regions.
+ * @return {!Promise<HTMLElement>} a div that contains the live region. This can typically be ignored, this exists to aid in chaining creation of non-existant regions.
  */
 function getLiveRegion(id) {
 	const updatePromise = new Promise((resolve, reject) => {
