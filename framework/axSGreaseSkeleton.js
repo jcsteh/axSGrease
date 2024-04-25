@@ -31,7 +31,6 @@ function announce(text, regionId) {
  * @param {string} id the name of the new live region. This is an html id.
  * @return {!Promise<HTMLElement>} a div that contains the live region. This can typically be ignored, this exxists to aid in chaining creation of non-existant regions.
  */
-
 function getLiveRegion(id) {
 	const updatePromise = new Promise((resolve, reject) => {
 		if (!id) {

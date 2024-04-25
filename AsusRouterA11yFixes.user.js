@@ -259,7 +259,7 @@ const DYNAMIC_TWEAKS = [
 	},
 ];
 
-/** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
+/** Add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
 function userInit() { }
 
 /*** Lights, camera, action! ***/
