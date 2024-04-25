@@ -15,7 +15,7 @@
 
 /**
  * Adds text to the given live region, and clears it a second later so it's no
- * longer in the virtual buffer.
+ * longer perceivable.
  * @param {string} regionid an id of a region.
  */
 function announce(text, regionId) {
