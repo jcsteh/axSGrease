@@ -157,6 +157,9 @@ const DYNAMIC_TWEAKS = [
 				cell.setAttribute("role", "cell");
 			}
 		}},
+	// Remove aria-description from things with hovercards.
+	{selector: '[data-hovercard-url][aria-description]',
+		tweak: el => el.removeAttribute("aria-description")},
 ];
 
 /*** Lights, camera, action! ***/
