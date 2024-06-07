@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2019 Mozilla Corporation, Derek Riemer
+// @copyright 2019-2024 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2019.1
+// @version        2024.1
 // @include https://github.com/*
 // ==/UserScript==
 
@@ -160,6 +160,9 @@ const DYNAMIC_TWEAKS = [
 	// Remove aria-description from things with hovercards.
 	{selector: '[data-hovercard-url][aria-description]',
 		tweak: el => el.removeAttribute("aria-description")},
+	// Remove headings from folder and file lists.
+	{selector: 'table[aria-labelledby=folders-and-files] :is(h2, h3)',
+		tweak: makePresentational},
 ];
 
 /*** Lights, camera, action! ***/
