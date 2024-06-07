@@ -157,9 +157,6 @@ const DYNAMIC_TWEAKS = [
 				cell.setAttribute("role", "cell");
 			}
 		}},
-	// Commit group headers in commit listings.
-	{selector: '.commit-group-title',
-		tweak: [makeHeading, 2]},
 ];
 
 /*** Lights, camera, action! ***/
