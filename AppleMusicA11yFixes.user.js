@@ -3,10 +3,11 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Apple Music.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2019-2020 Mozilla Corporation, Derek Riemer
+// @copyright 2019-2024 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2020.1
+// @version        2024.1
 // @include https://music.apple.com/*
+// @include https://beta.music.apple.com/*
 // ==/UserScript==
 
 /*** Functions for common tweaks. ***/
@@ -145,25 +146,22 @@ const DYNAMIC_TWEAK_ATTRIBS = [];
 
 // Tweaks that must be applied whenever a node is added/changed.
 const DYNAMIC_TWEAKS = [
-	// Get rid of the svg inside the search combobox which prevents detection of
-	// the inner textbox with NVDA browse mode.
-	{selector: '.dt-search-box__icon',
-		tweak: makePresentational},
-	// Make "Library" and "Playlists" headings.
-	{selector: '.web-navigation__header-text',
-		tweak: [makeHeading, 2]},
+	// Remove pointless semantics on a form inside the search box so screen
+	// readers can find and focus the search box properly.
+	{selector: '#search-input-form',
+		tweak: el => {
+			el.removeAttribute("tabindex");
+			el.setAttribute("role", "none");
+		}},
 	// Make the section containing playback controls, etc. into a region.
-	{selector: '.web-chrome',
-		tweak: [makeRegion, "Controls"]},
-	// Make the currently playing song title into a heading.
-	{selector: '.web-chrome-playback-lcd__song-name-scroll',
-		tweak: [makeHeading, 1]},
+	{selector: '.player-bar',
+		tweak: el => el.setAttribute("role", "region")},
+	// Make the section containing the song info into a region.
+	{selector: '[slot=lcd]',
+		tweak: [makeRegion, "Info"]},
 	// Fix cells in song lists.
-	{selector: '.col',
+	{selector: '.songs-list__col',
 		tweak: el => el.setAttribute("role", "cell")},
-	// The Add to library button for songs in song lists.
-	{selector: '.add-to-library',
-		tweak: [setLabel, "Add to library"]},
 	// The title of an active radio station.
 	{selector: '.typography-large-title-emphasized',
 		tweak: [makeHeading, 1]},
