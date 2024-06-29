@@ -163,6 +163,16 @@ const DYNAMIC_TWEAKS = [
 	// Remove headings from folder and file lists.
 	{selector: 'table[aria-labelledby=folders-and-files] :is(h2, h3)',
 		tweak: makePresentational},
+	// Remove table-related roles from release asset links.
+	{selector: 'ul:not([role]):has(li[role="row"])',
+		tweak: el => {
+			// Add a list role, for future proofing in case GitHub double down on making these tables.
+			el.setAttribute("role", "list");
+			el.querySelectorAll('li[role="row"]').forEach(row => {
+				row.removeAttribute("role");
+				row.querySelectorAll('[role="cell"]').forEach(cell => cell.removeAttribute("role"));
+			});
+		}},
 ];
 
 /*** Lights, camera, action! ***/
