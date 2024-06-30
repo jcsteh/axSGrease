@@ -5,7 +5,7 @@
 // @author         James Teh <jteh@mozilla.com>
 // @copyright 2019-2024 Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2024.1
+// @version        2024.2
 // @include https://github.com/*
 // ==/UserScript==
 
@@ -146,9 +146,9 @@ const DYNAMIC_TWEAKS = [
 	// Issue listing tables.
 	{selector: '.js-navigation-container:not(.commits-listing)',
 		tweak: el => el.setAttribute("role", "table")},
-	{selector: '.Box-row:not(.js-commits-list-item)',
+	{selector: '.js-navigation-container:not(.commits-listing) .Box-row',
 		tweak: el => el.setAttribute("role", "row")},
-	{selector: '.Box-row .d-flex',
+	{selector: '.js-navigation-container:not(.commits-listing) .Box-row .d-flex',
 		tweak: el => {
 			// There's one of these inside every row. It's purely presentational.
 			makePresentational(el);
