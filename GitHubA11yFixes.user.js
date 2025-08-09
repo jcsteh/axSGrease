@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
 // @author         James Teh <jteh@mozilla.com>, Sascha Cowley <sascha@nvaccess.org>
-// @copyright 2019-2024 Mozilla Corporation, Derek Riemer, Sascha Cowley
+// @copyright 2019-2025 Mozilla Corporation, Derek Riemer, Sascha Cowley
 // @license Mozilla Public License version 2.0
-// @version        2024.3
+// @version        2025.2
 // @include https://github.com/*
 // ==/UserScript==
 
@@ -135,6 +135,11 @@ const DYNAMIC_TWEAKS = [
 			let comment = cell.querySelector('.add-line-comment');
 			if (code && comment) {
 				makeElementOwn(cell, [code, comment]);
+			}
+			if (comment) {
+				// These buttons only appear on hover, which sucks for screen reader users.
+				// Make them always visible.
+				comment.style.display = "block";
 			}
 		}},
 	// Make non-comment events into headings; e.g. closing/referencing an issue,
