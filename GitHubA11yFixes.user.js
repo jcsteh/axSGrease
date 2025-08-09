@@ -2,10 +2,10 @@
 // @name           GitHub Accessibility Fixes
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of GitHub.
-// @author         James Teh <jteh@mozilla.com>
-// @copyright 2019-2025 Mozilla Corporation, Derek Riemer
+// @author         James Teh <jteh@mozilla.com>, Sascha Cowley <sascha@nvaccess.org>
+// @copyright 2019-2025 Mozilla Corporation, Derek Riemer, Sascha Cowley
 // @license Mozilla Public License version 2.0
-// @version        2025.1
+// @version        2025.2
 // @include https://github.com/*
 // ==/UserScript==
 
@@ -168,6 +168,27 @@ const DYNAMIC_TWEAKS = [
 	// Remove headings from folder and file lists.
 	{selector: 'table[aria-labelledby=folders-and-files] :is(h2, h3)',
 		tweak: makePresentational},
+	// Make file viewer filenames headings, and the first item in the file viewer.
+	{selector: '.file-header .file-info .Truncate:has(.Link--primary)',
+		tweak: el => {
+			makeHeading(el, 2);
+			const headerRow = el.parentElement;
+			const children = Array.from(headerRow.children);
+			// Filename is the last child of .file-info, make it the first
+			children.unshift(children.pop());
+			if (headerRow) {
+				makeElementOwn(headerRow, children);
+			}
+		}},
+	// Label diffs and the like with their filename.
+	{selector: '.file',
+		tweak: el => {
+			const label = el.querySelector(".Link--primary");
+			const file = el.querySelector(".js-file-content");
+			if (label && file) {
+				makeRegion(file, label.textContent);
+			}
+		}},
 ];
 
 /*** Lights, camera, action! ***/
