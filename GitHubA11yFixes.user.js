@@ -171,11 +171,11 @@ const DYNAMIC_TWEAKS = [
 	// Make file viewer filenames headings, and the first item in the file viewer.
 	{selector: '.file-header .file-info .Truncate:has(.Link--primary)',
 		tweak: el => {
-			makeHeading(el, 2)
-			let headerRow = el.parentElement
-			let children = Array.from(headerRow.children)
+			makeHeading(el, 2);
+			const headerRow = el.parentElement;
+			const children = Array.from(headerRow.children);
 			// Filename is the last child of .file-info, make it the first
-			children.unshift(children.pop())
+			children.unshift(children.pop());
 			if (headerRow) {
 				makeElementOwn(headerRow, children);
 			}
@@ -183,10 +183,10 @@ const DYNAMIC_TWEAKS = [
 	// Label diffs and the like with their filename.
 	{selector: '.file',
 		tweak: el => {
-			label = el.querySelector(".Link--primary")
-			file = el.querySelector(".js-file-content")
+			const label = el.querySelector(".Link--primary");
+			const file = el.querySelector(".js-file-content");
 			if (label && file) {
-				makeRegion(file, label.textContent)
+				makeRegion(file, label.textContent);
 			}
 		}},
 ];
