@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of Phabricator.
 // @author         James Teh <jteh@mozilla.com>
-// @copyright 2018 Mozilla Corporation
+// @copyright 2018-2025 Mozilla Corporation
 // @license Mozilla Public License version 2.0
-// @version        2018.2
+// @version        2025.1
 // @grant GM_log
 // @include https://phabricator.services.mozilla.com/D*
 // ==/UserScript==
@@ -33,6 +33,12 @@ function makePresentational(el) {
 
 function setLabel(el, label) {
 	el.setAttribute("aria-label", label);
+}
+
+function labelHiddenStatusIcon(el, label) {
+	el.removeAttribute("aria-hidden");
+	el.setAttribute("role", "image");
+	setLabel(el, label);
 }
 
 /*** Code to apply the tweaks when appropriate. ***/
@@ -90,6 +96,21 @@ const LOAD_TWEAKS = [
 	// The diff is an h1, so the files inside the diff should be an h2, not an h1.
 	{selector: '.differential-file-icon-header',
 		tweak: [makeHeading, 2]},
+	// Reviewer status icons.
+	{selector: '.phui-status-item-target .fa-circle-o',
+		tweak: [labelHiddenStatusIcon, "pending"]},
+	{selector: '.phui-status-item-target .fa-minus-circle',
+		tweak: [labelHiddenStatusIcon, "pending blocking"]},
+	{selector: '.phui-status-item-target .fa-check-circle',
+		tweak: [labelHiddenStatusIcon, "accepted"]},
+	{selector: '.phui-status-item-target .fa-check-circle-o',
+		tweak: [labelHiddenStatusIcon, "accepted prior"]},
+	{selector: '.phui-status-item-target .fa-times-circle',
+		tweak: [labelHiddenStatusIcon, "requested changes"]},
+	{selector: '.phui-status-item-target .fa-times-circle-o',
+		tweak: [labelHiddenStatusIcon, "requested changes to prior"]},
+	{selector: '.phui-status-item-target .fa-comment',
+		tweak: [labelHiddenStatusIcon, "comment"]},
 ]
 
 // Tweaks that must be applied whenever a node is added.
