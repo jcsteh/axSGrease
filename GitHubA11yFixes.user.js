@@ -5,7 +5,7 @@
 // @author         James Teh <jteh@mozilla.com>, Sascha Cowley <sascha@nvaccess.org>
 // @copyright 2019-2025 Mozilla Corporation, Derek Riemer, Sascha Cowley
 // @license Mozilla Public License version 2.0
-// @version        2025.2
+// @version        2025.3
 // @include https://github.com/*
 // ==/UserScript==
 
@@ -146,7 +146,7 @@ const DYNAMIC_TWEAKS = [
 	// approving/requesting changes to a PR, merging a PR. Exclude commits and
 	// commit references because these contain too much detail and there's no
 	// way to separate the header from the body.
-	{selector: '.TimelineItem:not(.js-commit) .TimelineItem-body:not(.my-0):not(.discussion-comment):not([id^="ref-commit-"])',
+	{selector: '.TimelineItem:not(.js-commit, .pt-0) .TimelineItem-body:not(.my-0):not(.discussion-comment):not([id^="ref-commit-"])',
 		tweak: [makeHeading, 3]},
 	// Issue listing tables.
 	{selector: '.js-navigation-container:not(.commits-listing)',
