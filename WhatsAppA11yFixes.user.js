@@ -5,7 +5,7 @@
 // @author         James Teh <jamie@jantrid.net>
 // @copyright 2019-2025 Mozilla Corporation, Derek Riemer, James Teh
 // @license Mozilla Public License version 2.0
-// @version        2025.1
+// @version        2025.2
 // @include https://web.whatsapp.com/
 // ==/UserScript==
 
@@ -254,6 +254,15 @@ function userInit(){
 			button.click();
 		}
 	}, { capture: true });
+	document.addEventListener("focusout", event => {
+		// When the tab loses focus, WhatsApp forces focus into the message list,
+		// regardless of where it was before. Override that absurdity.
+		setTimeout(() => {
+			if (!document.hasFocus() && document.activeElement != event.target) {
+				event.target.focus();
+			}
+		}, 50);
+	});
 }
 
 /*** Lights, camera, action! ***/
