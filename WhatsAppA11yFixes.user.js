@@ -214,10 +214,10 @@ const DYNAMIC_TWEAKS = [
 			// Remove phone numbers for unknown contacts. These have a slightly different
 			// format for normal chats and group chats.
 			const m = el.ariaLabel.match(
-				/^(?:Maybe (.*? ))?\+\d{1,2} [\d ]+ (.*)$/s
+				/^(?:[^\d ]+ (.*? ))?\+\d{1,3} [\d ]+ (.*)$/s
 			);
 			if (m) {
-				el.ariaLabel = `Maybe ${m[1] || ""} ${m[2]}`;
+				el.ariaLabel = `~ ${m[1] || ""} ${m[2]}`;
 			}
 		}},
 ];
