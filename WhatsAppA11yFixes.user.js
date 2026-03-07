@@ -3,9 +3,9 @@
 // @namespace      http://axSgrease.nvaccess.org/
 // @description    Improves the accessibility of WhatsApp Web.
 // @author         James Teh <jamie@jantrid.net>
-// @copyright 2019-2025 Mozilla Corporation, Derek Riemer, James Teh
+// @copyright 2019-2026 Mozilla Corporation, Derek Riemer, James Teh
 // @license Mozilla Public License version 2.0
-// @version        2025.2
+// @version        2026.1
 // @include https://web.whatsapp.com/
 // ==/UserScript==
 
@@ -194,7 +194,7 @@ const LOAD_TWEAKS = [
 
 // Attributes that should be watched for changes and cause dynamic tweaks to be
 // applied.
-const DYNAMIC_TWEAK_ATTRIBS = [];
+const DYNAMIC_TWEAK_ATTRIBS = ["aria-label"];
 
 // Tweaks that must be applied whenever an element is added/changed.
 const DYNAMIC_TWEAKS = [
@@ -209,6 +209,17 @@ const DYNAMIC_TWEAKS = [
 			}
 		}
 	},
+	{selector: '.message-in[aria-label]',
+		tweak: el => {
+			// Remove phone numbers for unknown contacts. These have a slightly different
+			// format for normal chats and group chats.
+			const m = el.ariaLabel.match(
+				/^(?:Maybe (.*? ))?\+\d{1,2} [\d ]+ (.*)$/s
+			);
+			if (m) {
+				el.ariaLabel = `Maybe ${m[1] || ""} ${m[2]}`;
+			}
+		}},
 ];
 
 /** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
