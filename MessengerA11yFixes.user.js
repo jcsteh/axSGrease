@@ -7,6 +7,7 @@
 // @license Mozilla Public License version 2.0
 // @version        2025.1
 // @include https://www.messenger.com/*
+// @include https://www.facebook.com/messages/*
 // ==/UserScript==
 
 /*** Functions for common tweaks. ***/
