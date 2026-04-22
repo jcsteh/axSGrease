@@ -5,7 +5,7 @@
 // @author         James Teh <jamie@jantrid.net>
 // @copyright 2019-2025 James Teh, Mozilla Corporation, Derek Riemer
 // @license Mozilla Public License version 2.0
-// @version        2025.1
+// @version        2026.1
 // @include https://www.messenger.com/*
 // @include https://www.facebook.com/messages/*
 // ==/UserScript==
@@ -199,6 +199,10 @@ const DYNAMIC_TWEAK_ATTRIBS = [];
 
 // Tweaks that must be applied whenever an element is added/changed.
 const DYNAMIC_TWEAKS = [
+	// Every message has an ancestor with role="article". This isn't useful and
+	// just causes irritating verbosity.
+	{selector: '[role=article]',
+		tweak: el => el.role = null},
 ];
 
 /** add your specific initialization here, so that if you ever update the framework from new skeleton your inits are not overridden. */
@@ -214,7 +218,7 @@ function userInit(){
 		}
 		// Make alt+2 focus the last message in the active chat.
 		if (event.altKey && event.key == "2") {
-			const messages = document.querySelectorAll('[role=main] [role=row] > div > [role=gridcell]');
+			const messages = document.querySelectorAll('[role=main] [aria-roledescription]');
 			if (messages.length > 0) {
 				const lastMessage = messages[messages.length - 1];
 				lastMessage.focus();
