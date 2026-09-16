@@ -5,7 +5,7 @@
 // @author         James Teh <jamie@jantrid.net>
 // @copyright 2019-2026 Mozilla Corporation, Derek Riemer, James Teh
 // @license Mozilla Public License version 2.0
-// @version        2026.1
+// @version        2026.2
 // @include https://web.whatsapp.com/
 // ==/UserScript==
 
@@ -200,7 +200,7 @@ const DYNAMIC_TWEAK_ATTRIBS = ["aria-label"];
 const DYNAMIC_TWEAKS = [
 	{selector: '[role=dialog]',
 		tweak: el => {
-			if (el.querySelector('[role=button][aria-pressed] img')) {
+			if (el.querySelector('button[aria-pressed] img')) {
 				// This is the reaction picker. It contains buttons which wilh switch to
 				// browse mode, but we want to use WhatsApp's own arrow key navigation
 				// here. Therefore, use role="application". Menu would be more appropriate,
