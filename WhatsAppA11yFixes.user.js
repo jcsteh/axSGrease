@@ -5,7 +5,7 @@
 // @author         James Teh <jamie@jantrid.net>
 // @copyright 2019-2026 Mozilla Corporation, Derek Riemer, James Teh
 // @license Mozilla Public License version 2.0
-// @version        2026.2
+// @version        2026.3
 // @include https://web.whatsapp.com/
 // ==/UserScript==
 
@@ -209,12 +209,12 @@ const DYNAMIC_TWEAKS = [
 			}
 		}
 	},
-	{selector: '.message-in[aria-label]',
+	{selector: '.focusable-list-item[aria-label]',
 		tweak: el => {
 			// Remove phone numbers for unknown contacts. These have a slightly different
 			// format for normal chats and group chats.
 			const m = el.ariaLabel.match(
-				/^(?:[^\d ]+ (.*? ))?\+\d{1,3} [\d ]+ (.*)$/s
+				/^(?:[^\d ]+ (.*? ))?\+\d{1,3} [-\d() ]+ (.*)$/s
 			);
 			if (m) {
 				el.ariaLabel = `~ ${m[1] || ""} ${m[2]}`;
